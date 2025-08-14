@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>xyz.nietongxue</groupId>
+        <artifactId>common2</artifactId>
+        <version>5.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>common2.core</artifactId>
+
+
+    <dependencies>
+        <!--        implementation("app.softwork:kotlinx-uuid-core:0.0.22")-->
+
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-datetime-jvm</artifactId>
+            <version>0.4.1</version>
+        </dependency>
+        <!--        implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")-->
+
+        <dependency>
+            <groupId>app.softwork</groupId>
+            <artifactId>kotlinx-uuid-core-jvm</artifactId>
+            <version>0.0.22</version>
+        </dependency>
+        <!--        net.pearx.kasechange:kasechange:1.4.1-->
+        <dependency>
+            <groupId>net.pearx.kasechange</groupId>
+            <artifactId>kasechange-jvm</artifactId>
+            <version>1.4.1</version>
+        </dependency>
+
+
+        <dependency>
+            <!--    com.appmattus.crypto:cryptohash:0.10.1-->
+            <groupId>com.appmattus.crypto</groupId>
+            <artifactId>cryptohash-jvm</artifactId>
+            <version>0.10.1</version>
+        </dependency>
+
+<!--        implementation("io.arrow-kt:arrow-core:1.2.0")-->
+        <dependency>
+            <groupId>io.arrow-kt</groupId>
+            <artifactId>arrow-core-jvm</artifactId>
+            <version>1.2.4</version>
+        </dependency>
+    </dependencies>
+
+</project>
