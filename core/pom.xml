@@ -48,6 +48,14 @@
             <artifactId>arrow-core-jvm</artifactId>
             <version>1.2.4</version>
         </dependency>
+
+<!--        implementation("io.github.encryptorcode:pluralize:1.0.0")-->
+
+        <dependency>
+            <groupId>io.github.encryptorcode</groupId>
+            <artifactId>pluralize</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
 </project>

@@ -16,6 +16,10 @@
         <module>testing</module>
         <module>persistence</module>
         <module>schema</module>
+        <module>files</module>
+        <module>diagram</module>
+        <module>taskDag</module>
+        <module>spring</module>
     </modules>
 
     <properties>
