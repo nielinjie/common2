@@ -1,9 +1,15 @@
 package xyz.nietongxue.common.schema
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo
 import xyz.nietongxue.common.base.cList
 import xyz.nietongxue.common.schema.json.Format
 
 
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
 interface DataSchema
 
 data class PrimitiveSchema(val constraints: List<Constraint>) : DataSchema {
@@ -27,6 +33,12 @@ data class PrimitiveSchema(val constraints: List<Constraint>) : DataSchema {
 
 
 //限制
+
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
 interface Constraint
 
 data class NamedType(val name: String) : Constraint
