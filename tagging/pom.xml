@@ -10,7 +10,9 @@
 
     </parent>
 
-    <artifactId>common2.diagram</artifactId>
+    <artifactId>common2.tagging</artifactId>
+
+
     <dependencies>
         <dependency>
             <groupId>xyz.nietongxue</groupId>
@@ -18,9 +20,10 @@
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>net.sourceforge.plantuml</groupId>
-            <artifactId>plantuml</artifactId>
-            <version>1.2024.6</version>
+            <groupId>xyz.nietongxue</groupId>
+            <artifactId>common2.json</artifactId>
+            <version>${revision}</version>
         </dependency>
     </dependencies>
+
 </project>

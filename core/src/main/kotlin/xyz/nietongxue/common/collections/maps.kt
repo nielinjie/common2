@@ -70,6 +70,10 @@ fun Any.toJsonString(pretty: Boolean = false): String {
     }
 }
 
-fun List<Pair<String, Any?>>.toNotNullMap(): Map<String, Any> {
+fun <T : Any> List<Pair<T, Any?>>.toNotNullMap(): Map<T, Any> {
     return this.filter { it.second != null }.associate { it.first to it.second!! }
+}
+
+fun <T : Any> Map<T, Any?>.toNotNullMap(): Map<T, Any> {
+    return this.toList().toNotNullMap()
 }

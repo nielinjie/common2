@@ -6,7 +6,6 @@
 
     <groupId>xyz.nietongxue</groupId>
     <artifactId>common2</artifactId>
-<!--    <version>5.0.0-SNAPSHOT</version>-->
     <version>${revision}</version>
     <packaging>pom</packaging>
 
@@ -20,6 +19,7 @@
         <module>diagram</module>
         <module>taskDag</module>
         <module>spring</module>
+        <module>tagging</module>
     </modules>
 
     <properties>

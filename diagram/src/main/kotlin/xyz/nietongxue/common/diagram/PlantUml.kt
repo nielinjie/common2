@@ -1,8 +1,13 @@
 package xyz.nietongxue.common.diagram
 
+import net.sourceforge.plantuml.FileFormat
+import net.sourceforge.plantuml.FileFormatOption
+import net.sourceforge.plantuml.SourceStringReader
 import net.sourceforge.plantuml.code.Transcoder
 import net.sourceforge.plantuml.code.TranscoderUtil
+import xyz.nietongxue.common.base.n
 import java.awt.Desktop
+import java.io.ByteArrayOutputStream
 import java.io.IOException
 import java.net.URI
 import java.net.URISyntaxException
@@ -52,6 +57,25 @@ sealed interface Uml {
 
 }
 
+fun plantuml(body: String): String {
+    return if (body.startsWith("@startuml ")) body else "@startuml" n
+            body n
+            "@enduml"
+}
 
+
+fun toSVG(plantUml: String): ByteArray {
+    val reader = SourceStringReader(plantUml)
+    val os = ByteArrayOutputStream()
+    reader.outputImage(os, FileFormatOption(FileFormat.SVG))
+    return os.toByteArray()
+}
+
+fun toPNG(plantUml: String): ByteArray {
+    val reader = SourceStringReader(plantUml)
+    val os = ByteArrayOutputStream()
+    reader.outputImage(os, FileFormatOption(FileFormat.PNG))
+    return os.toByteArray()
+}
 
 

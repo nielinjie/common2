@@ -1,0 +1,24 @@
+package xyz.nietongxue.common.json
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo
+
+
+/*
+
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "type"
+)
+
+
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+@MustBeDocumented
+@JsonTypeInfo(
+    use = JsonTypeInfo.Id.CLASS,
+    include = JsonTypeInfo.As.PROPERTY,
+    property = "_type"
+)
+annotation class JsonWithType
