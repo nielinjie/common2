@@ -11,7 +11,25 @@ interface Located {
 
 data class Coordinate(
     val dimensions: List<Dimension>
-)
+) {
+    fun dimension(name: Name): Dimension? {
+        return dimensions.singleOrNull { it.name == name }
+    }
+}
+
+
+fun Coordinate.validate(location: Location): Boolean {
+    location.values.forEach {
+        val dimension = dimension(it.dimensionName)
+        if (dimension == null) {
+            return false
+        }else{
+            TODO()
+        }
+    }
+    return TODO()
+}
+
 
 /*
 一个完备（是否过于复杂）的定位机制。
