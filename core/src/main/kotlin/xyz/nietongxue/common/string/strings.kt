@@ -1,4 +1,4 @@
-package xyz.nietongxue.common.base
+package xyz.nietongxue.common.string
 
 import net.pearx.kasechange.CaseFormat
 import net.pearx.kasechange.toCase

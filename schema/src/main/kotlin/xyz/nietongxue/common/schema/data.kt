@@ -1,7 +1,7 @@
 package xyz.nietongxue.common.schema
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import xyz.nietongxue.common.base.cList
+import xyz.nietongxue.common.string.cList
 import xyz.nietongxue.common.schema.json.Format
 
 

@@ -1,4 +1,4 @@
-package xyz.nietongxue.common.base
+package xyz.nietongxue.common.collections
 
 
 typealias CompositedList<A> = List<CompositedListItem<A>>

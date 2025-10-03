@@ -1,4 +1,4 @@
-package xyz.nietongxue.common.base
+package xyz.nietongxue.common.files
 
 import kotlin.io.path.pathString
 import java.nio.file.Path as FPath

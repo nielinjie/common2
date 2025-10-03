@@ -5,7 +5,7 @@ import net.sourceforge.plantuml.FileFormatOption
 import net.sourceforge.plantuml.SourceStringReader
 import net.sourceforge.plantuml.code.Transcoder
 import net.sourceforge.plantuml.code.TranscoderUtil
-import xyz.nietongxue.common.base.n
+import xyz.nietongxue.common.string.n
 import java.awt.Desktop
 import java.io.ByteArrayOutputStream
 import java.io.IOException

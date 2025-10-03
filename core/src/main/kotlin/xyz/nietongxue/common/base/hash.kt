@@ -20,3 +20,11 @@ fun hashBytes(bytes: ByteArray): Hash {
         Hash(it)
     }
 }
+
+
+fun String.md5(): String {
+    return java.security.MessageDigest.getInstance("MD5")
+        .digest(this.toByteArray())
+        .map { String.format("%02x", it) }
+        .joinToString("")
+}

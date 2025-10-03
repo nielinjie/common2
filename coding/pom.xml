@@ -10,9 +10,6 @@
         <version>${revision}</version>
     </parent>
 
-    <groupId>xyz.nietongxue</groupId>
     <artifactId>coding</artifactId>
-    <version>${revision}</version>
-
 
 </project>

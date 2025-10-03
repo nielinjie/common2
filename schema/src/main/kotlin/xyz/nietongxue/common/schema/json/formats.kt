@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
-import xyz.nietongxue.common.base.cList
+import xyz.nietongxue.common.string.cList
 import xyz.nietongxue.common.schema.parse.RJson
 import xyz.nietongxue.common.schema.parse.RJson.rjsonToJackson
 

@@ -1,5 +1,12 @@
 package xyz.nietongxue.common.base
 
+
+
+/*
+类似于 version chain 的一条线。所以比较重要的是 end。从 end 可以推出一条线
+TODO 叫 stream不太好。
+ */
+
 interface SingleStream<A : Any> {
     fun base(a: A): A?
     fun end(): A

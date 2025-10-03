@@ -10,9 +10,7 @@
         <version>${revision}</version>
     </parent>
 
-    <groupId>xyz.nietongxue</groupId>
     <artifactId>graph</artifactId>
-    <version>${revision}</version>
 
     <dependencies>
         <dependency>
