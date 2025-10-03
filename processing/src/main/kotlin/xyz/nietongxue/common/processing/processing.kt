@@ -1,6 +1,7 @@
 package xyz.nietongxue.common.processing
 
 import arrow.core.*
+import kotlin.collections.plus
 
 
 typealias Processing<L, E, A> = Pair<List<L>, EitherNel<E, A>>

@@ -20,6 +20,10 @@
         <module>taskDag</module>
         <module>spring</module>
         <module>tagging</module>
+        <module>directive</module>
+        <module>processing</module>
+        <module>graph</module>
+        <module>coding</module>
     </modules>
 
     <properties>

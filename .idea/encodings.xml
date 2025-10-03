@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/coding/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/coding/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/diagram/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/diagram/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/directive/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/directive/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/files/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/files/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/graph/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/graph/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/json/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/json/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/persistence/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/persistence/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/processing/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/processing/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/schema/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/schema/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring/src/main/kotlin" charset="UTF-8" />

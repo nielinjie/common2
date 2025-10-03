@@ -3,11 +3,11 @@ package xyz.nietongxue.common.collections
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import xyz.nietongxue.common.base.Attrs
+import org.springframework.util.LinkedMultiValueMap
+import org.springframework.util.MultiValueMap
+import xyz.nietongxue.common.base.Stuff
 import kotlin.collections.iterator
 
-typealias PropertyList = Attrs<Any>
-typealias Stuff = PropertyList
 
 fun Map<String, Any>.toAllLevelMutable(): MutableMap<String, Any> {
     val result = mutableMapOf<String, Any>()
@@ -76,4 +76,10 @@ fun <T : Any> List<Pair<T, Any?>>.toNotNullMap(): Map<T, Any> {
 
 fun <T : Any> Map<T, Any?>.toNotNullMap(): Map<T, Any> {
     return this.toList().toNotNullMap()
+}
+
+fun Map<String, String>.toMultiValueMap(): MultiValueMap<String, String> {
+    val result = LinkedMultiValueMap<String, String>()
+    this.forEach { (key, value) -> result.add(key, value) }
+    return result
 }
