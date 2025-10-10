@@ -21,3 +21,13 @@ fun <T : Any, K : Any, V : Any> List<T>.associateNotNull(transform: (T) -> Pair<
         it.first != null && it.second != null
     } as List<Pair<K, V>>).toMap()
 }
+
+fun <T> List<T>.replaceWhen2(element: (T) -> T, condition: (T) -> Boolean): List<T> {
+    val index = this.indexOfFirst { condition(it) }
+    return if (index == -1) this else this.replaceAt(index, element(this[index]))
+}
+
+fun <T> List<T>.replaceOrAdd(element: (T?) -> T, condition: (T) -> Boolean): List<T> {
+    val index = this.indexOfFirst { condition(it) }
+    return if (index == -1) this.plus(element(null)) else this.replaceAt(index, element(this[index]))
+}
