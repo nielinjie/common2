@@ -4,6 +4,19 @@ import net.pearx.kasechange.CaseFormat
 import net.pearx.kasechange.toCase
 
 
+
+fun String.subStringList(): List<String> {
+    var index = 0
+    val re = mutableListOf<String>()
+    while (index <= this.length - 1) {
+        index++
+        val newName = this.substring(0, index)
+        re.add(newName)
+    }
+    return re
+}
+
+
 fun String.capitalizedCamel(): String {
     return this.toCase(CaseFormat.CAPITALIZED_CAMEL)
 }

@@ -30,13 +30,13 @@ fun <I, C> Selector<I, C>.and(fn: (I) -> Boolean): Selector<I, C> {
 }
 
 
-fun <I, C> Type<I>.selector(): Selector<I, C> {
-    return object : Selector<I, C> {
-        override fun select(input: List<I>, context: C): List<I> {
-            return input.filter {
-                instanceOf(it)
-            }
-        }
-    }
-}
+//fun <I, C> Type<I>.selector(): Selector<I, C> {
+//    return object : Selector<I, C> {
+//        override fun select(input: List<I>, context: C): List<I> {
+//            return input.filter {
+//                instanceOf(it)
+//            }
+//        }
+//    }
+//}
 
