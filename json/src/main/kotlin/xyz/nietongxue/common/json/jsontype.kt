@@ -1,5 +1,6 @@
 package xyz.nietongxue.common.json
 
+import com.fasterxml.jackson.annotation.JacksonAnnotationsInside
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 
@@ -13,12 +14,16 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 
 
  */
+
+
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.CLASS)
 @MustBeDocumented
+@JacksonAnnotationsInside
 @JsonTypeInfo(
     use = JsonTypeInfo.Id.CLASS,
     include = JsonTypeInfo.As.PROPERTY,
     property = "_type"
 )
 annotation class JsonWithType
+

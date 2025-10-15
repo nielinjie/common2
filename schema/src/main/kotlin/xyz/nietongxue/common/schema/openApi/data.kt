@@ -9,7 +9,7 @@ import xyz.nietongxue.common.schema.DataSchema
 import xyz.nietongxue.common.schema.jsonSchema.toJsonSchema
 
 fun DataSchema.toOpenApi(): Schema<Any> {
-    return this.toJsonSchema().toOpenApi()
+    return (this.toJsonSchema() as ObjectNode).toOpenApi()
 }
 
 fun ObjectNode.toOpenApi(): Schema<Any> {

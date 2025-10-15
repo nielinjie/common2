@@ -18,6 +18,11 @@
             <artifactId>common2.core</artifactId>
             <version>${revision}</version>
         </dependency>
+        <dependency>
+            <groupId>xyz.nietongxue</groupId>
+            <artifactId>common2.json</artifactId>
+            <version>${revision}</version>
+        </dependency>
 <!--        implementation("tv.twelvetone.rjson:rjson:1.3.1-SNAPSHOT")-->
         <dependency>
             <groupId>tv.twelvetone.rjson</groupId>
@@ -31,6 +36,19 @@
             <version>2.2.7</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>xyz.nietongxue</groupId>
+            <artifactId>common2.testing</artifactId>
+            <version>${revision}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.7</version>
+        </dependency>
     </dependencies>
 
 

@@ -3,6 +3,7 @@ package xyz.nietongxue.common.schema
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import xyz.nietongxue.common.string.cList
 import xyz.nietongxue.common.schema.json.Format
+import javax.xml.crypto.Data
 
 
 @JsonTypeInfo(
@@ -11,6 +12,9 @@ import xyz.nietongxue.common.schema.json.Format
     property = "type"
 )
 interface DataSchema
+
+data class BooleanSchema(val value: Boolean) : DataSchema
+
 
 data class PrimitiveSchema(val constraints: List<Constraint>) : DataSchema {
     fun typeName(): String {
@@ -64,7 +68,7 @@ interface ConstraintRecognizer {
 
 object TypeNameRecognizer : ConstraintRecognizer {
     override fun recognize(textValue: String): Constraint? {
-        val types = "string,number,boolean,any".cList()
+        val types = "string,number,boolean,any,int".cList()
         return types.firstOrNull {
             textValue == it
         }?.let {
@@ -89,12 +93,10 @@ object RequiredRecognizer : ConstraintRecognizer {
 
 data class ArraySchema(val itemSchema: DataSchema) : DataSchema
 data class ObjectSchema(val properties: Map<String, DataSchema>) : DataSchema {
-    fun additional(): AdditionalProperties? {
-        return this.properties.filter {
-            it.key == "_"
-        }.firstNotNullOfOrNull {
-            AdditionalProperties(it.value)
-        }
+    fun additional(): AdditionalProperties {
+        return this.properties["_"]?.let {
+            AdditionalProperties(it)
+        } ?: AdditionalProperties(BooleanSchema(true))
     }
 }
 
