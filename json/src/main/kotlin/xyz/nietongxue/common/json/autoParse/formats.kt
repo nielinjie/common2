@@ -1,4 +1,4 @@
-package xyz.nietongxue.common.schema.json
+package xyz.nietongxue.common.json.autoParse
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -6,8 +6,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
 import xyz.nietongxue.common.string.cList
-import xyz.nietongxue.common.schema.parse.RJson
-import xyz.nietongxue.common.schema.parse.RJson.rjsonToJackson
 
 
 /**
@@ -41,7 +39,7 @@ https://www.relaxedjson.org
  */
 object RJsonFormat : Format {
     override fun json(string: String): JsonNode {
-        return rjsonToJackson(RJson.parse(string))
+        return RJson.rjsonToJackson(RJson.parse(string))
     }
 
     override fun shortList(string: String): List<String> {

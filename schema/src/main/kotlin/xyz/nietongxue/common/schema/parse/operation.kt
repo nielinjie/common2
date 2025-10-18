@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import xyz.nietongxue.common.schema.Operation
 import xyz.nietongxue.common.schema.Parameter
-import xyz.nietongxue.common.schema.json.Format
-import xyz.nietongxue.common.schema.json.autoParse
+import xyz.nietongxue.common.json.autoParse.Format
+import xyz.nietongxue.common.json.autoParse.autoParse
 
 fun parseOperation(json: String, format: Format? = null): Operation {
     return if (format == null) { //TODO 这里 parse 了两遍。

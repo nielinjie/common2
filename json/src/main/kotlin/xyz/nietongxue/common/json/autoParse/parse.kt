@@ -1,4 +1,4 @@
-package xyz.nietongxue.common.schema.json
+package xyz.nietongxue.common.json.autoParse
 
 import com.fasterxml.jackson.databind.JsonNode
 

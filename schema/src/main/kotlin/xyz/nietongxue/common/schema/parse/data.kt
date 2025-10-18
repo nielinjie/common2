@@ -10,8 +10,8 @@ import xyz.nietongxue.common.schema.BooleanSchema
 import xyz.nietongxue.common.schema.DataSchema
 import xyz.nietongxue.common.schema.ObjectSchema
 import xyz.nietongxue.common.schema.PrimitiveSchema
-import xyz.nietongxue.common.schema.json.Format
-import xyz.nietongxue.common.schema.json.autoParse
+import xyz.nietongxue.common.json.autoParse.Format
+import xyz.nietongxue.common.json.autoParse.autoParse
 
 fun parseData(json: JsonNode, format: Format): DataSchema {
     return when (json) {

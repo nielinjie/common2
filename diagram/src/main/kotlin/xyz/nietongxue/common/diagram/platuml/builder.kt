@@ -26,6 +26,8 @@ fun UmlBuilder.component(name: String, fn: UmlBuilder.() -> Unit) {
     this.container(name, "component", fn)
 }
 
+
+
 /*
 actor actor
 agent agent

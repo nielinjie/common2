@@ -2,8 +2,7 @@ package xyz.nietongxue.common.schema
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
 import xyz.nietongxue.common.string.cList
-import xyz.nietongxue.common.schema.json.Format
-import javax.xml.crypto.Data
+import xyz.nietongxue.common.json.autoParse.Format
 
 
 @JsonTypeInfo(
