@@ -29,4 +29,10 @@ fun Logger.pretty(templateString: String? = null, result: Any, level: Level = Le
         else
             event.log(templateString, string)
     }
+    if(result is String){
+        runCatching {
+            val json = jacksonObjectMapper().readTree(result)
+            this.pretty(templateString, json, level)
+        }
+    }
 }
