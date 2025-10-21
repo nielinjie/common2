@@ -1,7 +1,10 @@
 package xyz.nietongxue.common.json.autoParse
 
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.json.JsonReadFeature
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.kotlinModule
@@ -39,7 +42,13 @@ https://www.relaxedjson.org
  */
 object RJsonFormat : Format {
     override fun json(string: String): JsonNode {
-        return RJson.rjsonToJackson(RJson.parse(string))
+//        <dependency>
+//        <groupId>tv.twelvetone.rjson</groupId>
+//        <artifactId>rjson</artifactId>
+//        <version>1.3.1-SNAPSHOT</version>
+//        </dependency>
+        TODO("rjson 貌似死了，相关repository中找不到这个东西了。")
+//        return RJson.rjsonToJackson(RJson.parse(string))
     }
 
     override fun shortList(string: String): List<String> {
@@ -48,6 +57,28 @@ object RJsonFormat : Format {
 
 }
 
+
+object Json5:Format {
+    override fun json(string: String): JsonNode {
+        /*
+        ALLOW_UNQUOTED_FIELD_NAMES
+        ALLOW_TRAILING_COMMA
+        ALLOW_SINGLE_QUOTES
+        ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER
+        ALLOW_NON_NUMERIC_NUMBERS
+        ALLOW_LEADING_DECIMAL_POINT_FOR_NUMBERS
+         */
+        val om = jacksonObjectMapper().also{
+            it.enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES)
+            it.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES)
+            it.enable(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER)
+            it.enable(JsonParser.Feature.ALLOW_TRAILING_COMMA)
+            it.enable(JsonParser.Feature.ALLOW_COMMENTS)
+            it.enable(JsonParser.Feature.ALLOW_LEADING_DECIMAL_POINT_FOR_NUMBERS)
+        }
+        return om.readTree(string)
+    }
+}
 /*
 json
 就是一般的 json。

@@ -26,10 +26,12 @@
             <version>2.9.0</version>
         </dependency>
 
-        <dependency>
-            <groupId>tv.twelvetone.rjson</groupId>
-            <artifactId>rjson</artifactId>
-            <version>1.3.1-SNAPSHOT</version>
-        </dependency>
+
+<!--        implementation("com.github.joshy:jackson-json5:1.0.0")-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.joshy</groupId>-->
+<!--            <artifactId>jackson-json5</artifactId>-->
+<!--            <version>1.0.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 </project>

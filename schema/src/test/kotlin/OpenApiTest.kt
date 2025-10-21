@@ -10,7 +10,7 @@ class OpenApiTest {
 
     @Test
     fun testJsonSchema(){
-        val string = "{type:string, data:{}}"
+        val string = "{type:'string', data:{}}"
         val schema = parseData( string)
         schema.toJsonSchema().also {
             println(it.toPrettyString())
@@ -18,7 +18,7 @@ class OpenApiTest {
     }
     @Test
     fun testJsonSchema2(){
-        val string = "{type:string, data:{ _: false }}"
+        val string = "{type:'string', data:{ _: false }}"
         val schema = parseData( string)
         schema.toJsonSchema().also {
             println(it.toPrettyString())
