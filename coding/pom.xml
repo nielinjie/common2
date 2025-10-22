@@ -10,6 +10,6 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>coding</artifactId>
+    <artifactId>common2.coding</artifactId>
 
 </project>

@@ -10,7 +10,7 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>graph</artifactId>
+    <artifactId>common2.graph</artifactId>
 
     <dependencies>
         <dependency>
