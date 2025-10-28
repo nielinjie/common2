@@ -180,4 +180,27 @@ class PlantUmlTest {
             imageDisplay(it)
         }
     }
+    @Test
+    fun testBuildingGraph() {
+        uml {
+            element("a")
+            container("b") {
+                database("c") {
+                    component("e")
+                }
+            }
+            folder("folder") {
+                file("file")
+            }
+            component("component0"){
+                component("component2")
+            }
+            link("a", "e")
+            link("file", "e", fromToLabel = "file" to "e")
+        }.also {
+            toGraph(it).also {
+                println(it)
+            }
+        }
+    }
 }

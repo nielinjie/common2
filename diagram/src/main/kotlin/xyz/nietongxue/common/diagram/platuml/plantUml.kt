@@ -45,7 +45,7 @@ fun browser(umlString: String) {
     }
 }
 
-interface Uml {
+sealed interface Uml {
 
 
     data class Root(val units: List<Uml>) : Uml {
@@ -167,3 +167,4 @@ fun toAscii(plantUml: String): String {
     reader.outputImage(os, FileFormatOption(FileFormat.UTXT))
     return String(os.toByteArray())
 }
+

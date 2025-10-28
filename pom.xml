@@ -23,7 +23,7 @@
         <module>directive</module>
         <module>processing</module>
         <module>graph</module>
-        <module>coding</module>
+        <module>dsl</module>
     </modules>
 
     <properties>

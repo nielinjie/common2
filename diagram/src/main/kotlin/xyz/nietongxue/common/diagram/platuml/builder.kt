@@ -4,30 +4,6 @@ package xyz.nietongxue.common.diagram.platuml
 
 
 
-
-
-fun UmlBuilder.component(name: String) {
-    this.element(name, "component")
-}
-
-
-fun UmlBuilder.file(name: String) {
-    this.element(name, "file")
-}
-
-fun UmlBuilder.database(name: String, fn: UmlBuilder.() -> Unit) {
-    this.container(name, "database", fn)
-}
-
-fun UmlBuilder.folder(name: String, fn: UmlBuilder.() -> Unit) {
-    this.container(name, "folder", fn)
-}
-fun UmlBuilder.component(name: String, fn: UmlBuilder.() -> Unit) {
-    this.container(name, "component", fn)
-}
-
-
-
 /*
 actor actor
 agent agent
@@ -52,38 +28,54 @@ storage storage
 usecase usecase
  */
 
+
+fun UmlBuilder.component(name: String) {
+    this.element(name, "component")
+}
+
+fun UmlBuilder.entity(name: String) {
+    this.element(name, "entity")
+}
+fun UmlBuilder.file(name: String) {
+    this.element(name, "file")
+}
+
 /*
 
 可嵌套的
 
-artifact artifact {
-}
-card card {
-}
-cloud cloud {
-}
-component component {
-}
-database database {
-}
-file file {
-}
-folder folder {
-}
-frame frame {
-}
-hexagon hexagon {
-}
-node node {
-}
-package package {
-}
-queue queue {
-}
-rectangle rectangle {
-}
-stack stack {
-}
-storage storage {
-}
+artifact artifact 
+card card 
+cloud cloud
+component component
+database database
+file file
+folder folder
+frame frame
+hexagon hexagon
+node node
+package package
+queue queue
+rectangle rectangle
+stack stack
+storage storage
  */
+
+
+fun UmlBuilder.database(name: String, fn: UmlBuilder.() -> Unit) {
+    this.container(name, "database", fn)
+}
+
+fun UmlBuilder.folder(name: String, fn: UmlBuilder.() -> Unit) {
+    this.container(name, "folder", fn)
+}
+fun UmlBuilder.component(name: String, fn: UmlBuilder.() -> Unit) {
+    this.container(name, "component", fn)
+}
+
+
+fun UmlBuilder.`package`(name: String, fn: UmlBuilder.() -> Unit){
+    this.container(name, "package", fn)
+}
+
+
