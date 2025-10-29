@@ -55,6 +55,7 @@ sealed interface Uml {
             })
         }
     }
+
     /*
     https://plantuml.com/zh/deployment-diagram
      */
@@ -140,9 +141,16 @@ class UmlBuilder {
     }
 
 
-    fun link(from: String, to: String, text: String = "", fromToLabel: Pair<String, String> = "" to "") {
-        elements.add(Uml.Link(from, to, text = text, fromToLabel = fromToLabel))
+    fun link(
+        from: String,
+        to: String,
+        type: String = "-->",
+        text: String = "",
+        fromToLabel: Pair<String, String> = "" to ""
+    ) {
+        elements.add(Uml.Link(from, to, type = type, text = text, fromToLabel = fromToLabel))
     }
+
 
 }
 
