@@ -78,6 +78,10 @@ fun <T : Any> Map<T, Any?>.toNotNullMap(): Map<T, Any> {
     return this.toList().toNotNullMap()
 }
 
+fun <T : Any> Map<T, Any?>.toNoNullValueMap(): Map<T, Any> { //这个名字更准确些。
+    return this.toList().toNotNullMap()
+}
+
 fun Map<String, String>.toMultiValueMap(): MultiValueMap<String, String> {
     val result = LinkedMultiValueMap<String, String>()
     this.forEach { (key, value) -> result.add(key, value) }
