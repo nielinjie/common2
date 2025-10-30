@@ -22,7 +22,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>6.2.10</version>
+            <version>${spring.framework.version}</version>
         </dependency>
     </dependencies>
 </project>

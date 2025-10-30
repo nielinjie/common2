@@ -1,5 +1,7 @@
 package xyz.nietongxue.common.diagram.platuml
 
+import xyz.nietongxue.common.base.tempFile
+import xyz.nietongxue.common.testing.openImage
 import kotlin.test.Test
 
 class PlantUmlTest {
@@ -201,6 +203,28 @@ class PlantUmlTest {
             toGraph(it).also {
                 println(it)
             }
+        }
+    }
+
+    @Test
+    fun testBuildingGraphImp() {
+        uml {
+            element("a")
+            container("b") {
+                database("c") {
+                    component("e")
+                }
+            }
+            folder("folder") {
+                file("file")
+            }
+            component("component0"){
+                component("component2")
+            }
+            link("a", "e")
+            link("file", "e", fromToLabel = "file" to "e")
+        }.also {
+            openImage(PlantUmlClient().image(plantuml(it)))
         }
     }
 }

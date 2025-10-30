@@ -5,7 +5,7 @@ import xyz.nietongxue.common.simpleGraph.Node
 import xyz.nietongxue.common.base.v3
 import xyz.nietongxue.common.simpleGraph.Edge
 
-fun toGraph(uml: Uml): Graph {
+fun toGraph(uml: Uml): Graph { //没有container结构
     require(uml is Uml.Root)
     return toGraphImp(uml, Graph())
 }

@@ -1,7 +1,6 @@
 package xyz.nietongxue.common.simpleGraph
 
 import xyz.nietongxue.common.base.Id
-import xyz.nietongxue.common.base.Name
 import xyz.nietongxue.common.base.Stuff
 import xyz.nietongxue.common.base.v7
 

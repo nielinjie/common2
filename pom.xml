@@ -32,6 +32,9 @@
         <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
         <revision>5.0.0-SNAPSHOT</revision> <!-- 统一版本变量 -->
         <flatten.plugin.version>1.7.2</flatten.plugin.version> <!-- 插件版本 -->
+        <spring.framework.version>6.2.10</spring.framework.version>
+        <kotlin.version>2.2.0</kotlin.version>
+        <jackson.version>2.19.0</jackson.version>
     </properties>
 
 
@@ -56,7 +59,7 @@
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
                 <artifactId>kotlin-maven-plugin</artifactId>
-                <version>2.2.0</version>
+                <version>${kotlin.version}</version>
                 <executions>
                     <execution>
                         <id>compile</id>
@@ -129,22 +132,22 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.19.0</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-kotlin</artifactId>
-            <version>2.19.0</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
-            <version>2.19.0</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-test-junit5</artifactId>
-            <version>2.2.0</version>
+            <version>${kotlin.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -156,7 +159,7 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-stdlib</artifactId>
-            <version>2.2.0</version>
+            <version>${kotlin.version}</version>
         </dependency>
     </dependencies>
     <distributionManagement>

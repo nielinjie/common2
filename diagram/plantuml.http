@@ -1,0 +1,25 @@
+### GET request to example server
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+
+###
+
+POST http://localhost:8888/png/
+Content-Type: text/plain; charset=utf-8
+accept: image/png
+
+@startuml
+Alice -> Bob: 测试
+@enduml
+
+
+###
+# 不行，始终返回html页面
+
+POST http://www.plantuml.com/uml/png/
+Content-Type: text/plain
+accept: image/png
+
+@startuml
+Alice -> Bob: 测试
+@enduml
