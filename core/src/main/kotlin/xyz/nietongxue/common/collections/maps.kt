@@ -23,8 +23,8 @@ fun Map<String, Any>.toAllLevelMutable(): MutableMap<String, Any> {
     return result
 }
 
-fun MutableMap<String, Any>.nestedPut(path: String, value: Any) {
-    val keys = path.split(".")
+
+fun MutableMap<String, Any>.nestedPut(keys: List<String>, value: Any) {
     val lastKey = keys.last()
     val parent = keys.dropLast(1)
         .fold(this) { acc, key ->
@@ -33,6 +33,24 @@ fun MutableMap<String, Any>.nestedPut(path: String, value: Any) {
             } as MutableMap<String, Any>
         }
     parent[lastKey] = value
+}
+
+fun MutableMap<String, Any>.nestedPut(path: String, value: Any) {
+    val keys = path.split(".")
+    this.nestedPut(keys, value)
+}
+
+fun Map<String, Any?>.nestedGet(keys: List<String>): Any? {
+    //AI生成
+    var current: Any? = this
+    for (key in keys) {
+        current = (current as? Map<String, Any?>)?.get(key) ?: error("not a map")
+    }
+    return current
+}
+fun Map<String, Any?>.nestedGet(path: String): Any? {
+    val keys = path.split(".")
+    return this.nestedGet(keys)
 }
 
 fun Stuff.toJsonString(): String {
