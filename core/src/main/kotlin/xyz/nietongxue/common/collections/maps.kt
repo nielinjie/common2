@@ -48,6 +48,7 @@ fun Map<String, Any?>.nestedGet(keys: List<String>): Any? {
     }
     return current
 }
+
 fun Map<String, Any?>.nestedGet(path: String): Any? {
     val keys = path.split(".")
     return this.nestedGet(keys)
@@ -91,6 +92,11 @@ fun Any.toJsonString(pretty: Boolean = false): String {
 fun <T : Any> List<Pair<T, Any?>>.toNotNullMap(): Map<T, Any> {
     return this.filter { it.second != null }.associate { it.first to it.second!! }
 }
+
+fun <T : Any> Map<T, Any>.singleOrNull(): Pair<T, Any>? {
+    return this.entries.singleOrNull()?.toPair()
+}
+
 
 fun <T : Any> Map<T, Any?>.toNotNullMap(): Map<T, Any> {
     return this.toList().toNotNullMap()
