@@ -3,8 +3,8 @@ package xyz.nietongxue.common.taskdag
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import xyz.nietongxue.common.taskdag.stringEvent.EventDefaults.START
-import xyz.nietongxue.common.taskdag.stringEvent.EventDefaults.SUCCESS
+import xyz.nietongxue.common.taskdag.stringEvent.CommonEvents.START
+import xyz.nietongxue.common.taskdag.stringEvent.CommonEvents.SUCCESS
 import xyz.nietongxue.common.taskdag.stringEvent.startFrom
 
 class DslTest {

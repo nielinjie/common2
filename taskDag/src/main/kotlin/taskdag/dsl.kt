@@ -1,12 +1,8 @@
 package xyz.nietongxue.common.taskdag
 
-import org.slf4j.LoggerFactory
+import xyz.nietongxue.common.taskdag.stringEvent.CommonNodes
 
-object TaskDefaults {
-    const val INIT = "INIT"
-    const val END = "END"
 
-}
 
 
 
@@ -166,13 +162,13 @@ class TaskDAGBuilder<E : Any>() {
 
 fun <E : Any> justInit(): InitTask<E> {
     return object : InitTask<E>() {
-        override val name: String = "INIT"
+        override val name: String = CommonNodes.INIT
     }
 }
 
 fun <E : Any> justEnd(): EndTask<E> {
     return object : EndTask<E>() {
-        override val name: String = "END"
+        override val name: String = CommonNodes.DONE
     }
 }
 

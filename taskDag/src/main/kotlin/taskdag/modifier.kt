@@ -25,7 +25,6 @@ class AddTrans<E : Any>(val trans: Trans<E>) : Modifier<E> {
     }
 }
 
-const val END_EXCEPTION = "end_exception"
 
 class DefaultExceptionTrans<E : Any>(val exceptionEndName: String, val exceptionEvent: E) : Modifier<E> {
     override fun modify(dag: TaskDAG<E>): TaskDAG<E> {

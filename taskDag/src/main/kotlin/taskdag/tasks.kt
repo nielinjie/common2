@@ -8,9 +8,10 @@ import org.springframework.statemachine.config.StateMachineBuilder
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer
 import org.springframework.statemachine.listener.StateMachineListenerAdapter
 import reactor.core.publisher.Mono
+import xyz.nietongxue.common.base.Stuff
 import java.util.concurrent.CountDownLatch
 
-typealias Context = Map<String, Any>
+typealias Context = Stuff
 typealias ActionResult<E> = Pair<E, Context>
 
 interface Task<E : Any> {
@@ -114,6 +115,8 @@ class TasksRuntime<E : Any>(
         sm.startReactively().subscribe()
         sm.sendEvent(Mono.just(MessageBuilder.withPayload(event).build())).subscribe()
     }
+
+
 
     fun waitForEnd(): Context {
         countdown.await()

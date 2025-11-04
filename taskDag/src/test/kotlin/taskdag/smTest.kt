@@ -1,6 +1,8 @@
 package xyz.nietongxue.common.taskdag
 
 import org.junit.jupiter.api.Test
+import xyz.nietongxue.common.taskdag.stringEvent.CommonEvents.START
+import xyz.nietongxue.common.taskdag.stringEvent.startWithInputs
 
 class SMTest {
     private val logger: org.slf4j.Logger = org.slf4j.LoggerFactory.getLogger(SMTest::class.java)
@@ -13,7 +15,7 @@ class SMTest {
         this.mock("task2","2_e")
         init().to(
             "task1"
-        ).on("i_1")
+        ).on(START)
         "task1".to("task2").on("1_2")
         "task2".to(end()).on("2_e")
     }
@@ -21,7 +23,7 @@ class SMTest {
     @Test
     fun test() {
         val runtime = TasksRuntime(dag)
-        runtime.start("i_1")
+        runtime.start(START)
         runtime.waitForEnd()
     }
 
