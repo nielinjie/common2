@@ -1,6 +1,7 @@
 package xyz.nietongxue.common.json
 
 import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import net.thisptr.jackson.jq.JsonQuery
 import net.thisptr.jackson.jq.Scope
@@ -18,4 +19,14 @@ fun transform(data: JsonNode, transfer: String, transferType: String): JsonNode 
     val out: MutableList<JsonNode> = mutableListOf()
     q.apply(rootScope, input, out::add)
     return om.valueToTree(if (transferType == JQ_TRANSFER) out else out.firstOrNull())
+}
+
+fun <K, V> Map<K, V>.transform(
+    transfer: String,
+    transferType: String,
+    om: ObjectMapper = jacksonObjectMapper()
+): Any {
+    return (transform(om.valueToTree(this), transfer, transferType) as JsonNode).let {
+        om.treeToValue(it, Any::class.java)
+    }
 }

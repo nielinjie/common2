@@ -20,6 +20,15 @@ class JqTest {
         val result = transform(om.valueToTree<ObjectNode>(data), transfer, transferType)
         logger.pretty(null, result)
     }
-
+    @Test
+    fun test2() {
+        val data = mapOf("a" to 1, "b" to 2)
+        val transfer = """
+            .a
+             """
+        val transferType = JQ_TRANSFER_FIRST
+        val result = data.transform( transfer, JQ_TRANSFER_FIRST)
+        logger.pretty( result)
+    }
 
 }
