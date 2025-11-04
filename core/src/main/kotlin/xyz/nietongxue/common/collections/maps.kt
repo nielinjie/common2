@@ -44,7 +44,7 @@ fun Map<String, Any?>.nestedGet(keys: List<String>): Any? {
     //AI生成
     var current: Any? = this
     for (key in keys) {
-        current = (current as? Map<String, Any?>)?.get(key) ?: error("not a map")
+        current = (current as? Map<String, Any?>)?.get(key)
     }
     return current
 }
