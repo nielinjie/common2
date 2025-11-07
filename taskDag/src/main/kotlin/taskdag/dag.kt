@@ -2,7 +2,16 @@ package xyz.nietongxue.common.taskdag
 
 import java.util.Collections.emptyList
 
-class TaskDAG<E : Any>(
+/*
+DAG 的一部分，有时候在DAG 通过几个 Graph 构成。
+ */
+class TaskGraph<E : Any>(
+    val tasks: List<Task<E>> = emptyList(),
+    val trans: List<Trans<E>> = emptyList()
+)
+
+
+data class TaskDAG<E : Any>(
     val tasks: List<Task<E>> = emptyList(),
     val trans: List<Trans<E>> = emptyList()
 ) {
@@ -11,9 +20,16 @@ class TaskDAG<E : Any>(
         return runCatching {
             val init = tasks.filter { it is InitTask<*> }
             val ends = tasks.filter { it is EndTask<*> }
-            require(init.size == 1) { "init task should be only one" }
-            require(ends.size > 0) { "end task should be at least one" }
+            require(init.size == 1) { "init task should be exactly one, but got - $init" }
+            require(ends.isNotEmpty()) { "end task should be at least one, but got - $ends" }
+
             val names = tasks.map { it.name }
+            require(names.size == names.toSet().size) {
+                "task name should be unique"
+            }
+            require(trans.toSet().size == trans.size) {
+                "trans should be unique"
+            }
             require(trans.all {
                 it.from in names && it.to in names
             }) {
@@ -38,8 +54,23 @@ class TaskDAG<E : Any>(
 }
 
 
+fun <E : Any> TaskDAG<E>.plus(taskGraph: TaskGraph<E>): TaskDAG<E> {
+    return TaskDAG(
+        tasks = tasks + taskGraph.tasks,
+        trans = trans + taskGraph.trans
+    )
+}
+
+fun <E : Any> TaskDAG<E>.plus(task: Task<E>): TaskDAG<E> {
+    return this.copy(
+        tasks = tasks + task,
+    )
+}
 
 
-
-
-
+fun <E : Any> TaskDAG<E>.toGraph(): TaskGraph<E> {
+    return TaskGraph(
+        tasks = tasks,
+        trans = trans
+    )
+}

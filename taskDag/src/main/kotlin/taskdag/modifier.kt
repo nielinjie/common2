@@ -29,17 +29,16 @@ class AddTrans<E : Any>(val trans: Trans<E>) : Modifier<E> {
 class DefaultExceptionTrans<E : Any>(val exceptionEndName: String, val exceptionEvent: E) : Modifier<E> {
     override fun modify(dag: TaskDAG<E>): TaskDAG<E> {
         val ends = dag.tasks.filterIsInstance<EndTask<*>>()
-        val exceptionEnd = ends.firstOrNull { it.name == exceptionEndName }
+        var exceptionEnd: EndTask<*>? = ends.firstOrNull { it.name == exceptionEndName }
         if (exceptionEnd == null) {
-            val newEnd = justEnd<E>()
-            val newTrans = (dag.normalTasks().map {
-                Trans(it.name, newEnd.name, exceptionEvent)
-            } + dag.trans).distinct()
-            return TaskDAG(
-                tasks = dag.tasks + newEnd, trans = newTrans
-            )
+            exceptionEnd = end<E>(exceptionEndName)
         }
-        return dag
+        val newTrans = (dag.normalTasks().map {
+            Trans(it.name, exceptionEnd.name, exceptionEvent)
+        } + dag.trans).distinct()
+        return TaskDAG(
+            tasks = dag.tasks + (exceptionEnd as EndTask<E>), trans = newTrans
+        )
     }
 }
 

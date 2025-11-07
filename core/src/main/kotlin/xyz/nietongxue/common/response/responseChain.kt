@@ -29,7 +29,7 @@ interface ResponseChainWorker<R, T> {
     fun handle(request: R): ResponseChainResult<T>
 }
 
-interface ResponseChainResult<T> {
+interface ResponseChainResult<out T> {
     data object NotMe : ResponseChainResult<Nothing>
     data class Done<T>(val result: T) : ResponseChainResult<T>
 

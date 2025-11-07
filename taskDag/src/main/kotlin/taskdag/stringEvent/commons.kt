@@ -16,12 +16,20 @@ fun Context.inputs(name: String): Any? {
     return this.nestedGet(listOf(CommonVars.INPUTS, name))
 }
 
-fun Context.outputs(taskName: String): Any? {
-    return this.nestedGet(listOf(CommonVars.OUTPUTS, taskName))
+fun Context.taskOutputs(taskName: String): Any? {
+    return this.nestedGet(listOf(CommonVars.TASK_OUTPUTS, taskName))
 }
 
-fun Context.setOutputs(taskName: String, value: Any): Context {
-    return this.toAllLevelMutable().also { it.nestedPut(listOf(CommonVars.OUTPUTS, taskName), value) }
+fun Context.setTaskOutputs(taskName: String, value: Any): Context {
+    return this.toAllLevelMutable().also { it.nestedPut(listOf(CommonVars.TASK_OUTPUTS, taskName), value) }
+}
+
+fun Context.outputs(name: String): Any? {
+    return this.nestedGet(listOf(CommonVars.OUTPUTS, name))
+}
+
+fun Context.setOutputs(name: String, value: Any): Context {
+    return this.toAllLevelMutable().also { it.nestedPut(listOf(CommonVars.OUTPUTS, name), value) }
 }
 
 fun Context.setInputs(name: String, value: Any): Context {
@@ -48,5 +56,6 @@ object CommonNodes {
 object CommonVars {
     const val EXCEPTION = "exception"
     const val INPUTS = "inputs"
+    const val TASK_OUTPUTS = "task_outputs"
     const val OUTPUTS = "outputs"
 }

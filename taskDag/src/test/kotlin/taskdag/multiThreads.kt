@@ -30,14 +30,14 @@ class MultiThreadsTest {
                 if ((input as String).startsWith("B")) {
                     EXCEPTION to context.setException("name is Bxx")
                 } else
-                    SUCCESS to context.setOutputs("useInputs", "hello, $input")
+                    SUCCESS to context.setTaskOutputs("useInputs", "hello, $input")
             })
 
             action("useOutput", action = { context ->
-                val output = context.outputs("useInputs").also {
+                val output = context.taskOutputs("useInputs").also {
                     println("outputs: $it")
                 }
-                SUCCESS to context.setOutputs("useOutput", "ping, $output")
+                SUCCESS to context.setTaskOutputs("useOutput", "ping, $output")
             })
             "task1".to("task2").on("1_2")
             "task2".to("useInputs").on(SUCCESS)
@@ -59,7 +59,7 @@ class MultiThreadsTest {
                 val runtime = TasksRuntime(dag)
                 runtime.startWithInputs(inputs.get(i).plus("no" to i))
                 runtime.waitForEnd().also {
-                    println(it.outputs("useOutput"))
+                    println(it.taskOutputs("useOutput"))
                     if (it.get(EXCEPTION) != null) {
                         println("thread --$i-- exception")
                     }

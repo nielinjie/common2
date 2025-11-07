@@ -1,16 +1,23 @@
 package xyz.nietongxue.common.taskdag
 
+import xyz.nietongxue.common.taskdag.stringEvent.CommonEvents.SUCCESS
 import xyz.nietongxue.common.taskdag.stringEvent.CommonNodes
-
-
-
-
+import xyz.nietongxue.common.taskdag.stringEvent.setTaskOutputs
 
 
 class TaskDAGBuilder<E : Any>() {
     val tasks = mutableListOf<Task<E>>()
     val trans = mutableListOf<Trans<E>>()
     val modifiers = mutableListOf<Modifier<E>>()
+
+
+    fun build(): TaskDAG<E> {
+        return TaskDAG(tasks, trans).let {
+            modifiers.fold(it) { acc, modifier ->
+                modifier.modify(acc)
+            }
+        }
+    }
 
     fun modifier(modifier: Modifier<E>) {
         this.modifiers.add(modifier)
@@ -251,10 +258,25 @@ class TransBuilder2<E : Any>() {
 fun <E : Any> dag(block: TaskDAGBuilder<E>.() -> Unit): TaskDAG<E> {
     val builder: TaskDAGBuilder<E> = TaskDAGBuilder<E>()
     builder.block()
-    return TaskDAG(builder.tasks, builder.trans).let {
-        builder.modifiers.fold(it) { acc, modifier ->
-            modifier.modify(acc)
+    return builder.build()
+}
+
+
+fun <E : Any> buildingDag(block: TaskDAGBuilder<E>.() -> Unit): TaskDAGBuilder<E> {
+    val builder: TaskDAGBuilder<E> = TaskDAGBuilder<E>()
+    builder.block()
+    return builder
+}
+
+fun <E : Any> graph(block: TaskDAGBuilder<E>.() -> Unit): TaskGraph<E> {
+    return dag(block).toGraph()
+}
+
+fun <E : Any> action(name: String, block: (Context) -> ActionResult<E>): Task<E> {
+    return graph {
+        action(name) {
+            block(it)
         }
-    }
+    }.tasks.single()
 }
 

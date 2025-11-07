@@ -31,14 +31,14 @@ class CommonSeqTasksTest {
                 val input = context.inputs("name").also {
                     println("inputs: $it")
                 }
-                SUCCESS to context.setOutputs("useInputs", "hello, $input")
+                SUCCESS to context.setTaskOutputs("useInputs", "hello, $input")
             })
 
             action("useOutput",action={context ->
-                val output = context.outputs("useInputs").also {
+                val output = context.taskOutputs("useInputs").also {
                     println("outputs: $it")
                 }
-                SUCCESS to context.setOutputs("useOutput", "ping, $output")
+                SUCCESS to context.setTaskOutputs("useOutput", "ping, $output")
             })
             init().to(
                 "task1"
@@ -51,7 +51,7 @@ class CommonSeqTasksTest {
         val runtime = TasksRuntime(dag)
         runtime.startWithInputs( mapOf("name" to "Alice"))
         runtime.waitForEnd().also {
-            println(it.outputs("useOutput"))
+            println(it.taskOutputs("useOutput"))
         }
     }
     @Test
@@ -72,14 +72,14 @@ class CommonSeqTasksTest {
                 val input = context.inputs("name").also {
                     println("inputs: $it")
                 }
-                SUCCESS to context.setOutputs("useInputs", "hello, $input")
+                SUCCESS to context.setTaskOutputs("useInputs", "hello, $input")
             })
 
             action("useOutput",action={context ->
-                val output = context.outputs("useInputs").also {
+                val output = context.taskOutputs("useInputs").also {
                     println("outputs: $it")
                 }
-                SUCCESS to context.setOutputs("useOutput", "ping, $output")
+                SUCCESS to context.setTaskOutputs("useOutput", "ping, $output")
             })
             startFrom("task1")
             "task1".to("task2").on("1_2")
@@ -90,7 +90,7 @@ class CommonSeqTasksTest {
         val runtime = TasksRuntime(dag)
         runtime.startWithInputs( mapOf("name" to "Alice"))
         runtime.waitForEnd().also {
-            println(it.outputs("useOutput"))
+            println(it.taskOutputs("useOutput"))
         }
     }
     @Test
@@ -115,10 +115,10 @@ class CommonSeqTasksTest {
             })
 
             action("useOutput",action={context ->
-                val output = context.outputs("useInputs").also {
+                val output = context.taskOutputs("useInputs").also {
                     println("outputs: $it")
                 }
-                SUCCESS to context.setOutputs("useOutput", "ping, $output")
+                SUCCESS to context.setTaskOutputs("useOutput", "ping, $output")
             })
             startFrom("task1")
             defaultCatching(FAIL)
