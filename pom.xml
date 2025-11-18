@@ -24,6 +24,8 @@
         <module>processing</module>
         <module>graph</module>
         <module>dsl</module>
+        <module>xml</module>
+        <module>bpmn</module>
     </modules>
 
     <properties>

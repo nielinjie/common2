@@ -1,5 +1,6 @@
 package xyz.nietongxue.common.taskdag
 
+import org.slf4j.LoggerFactory
 import org.springframework.messaging.support.MessageBuilder
 import org.springframework.statemachine.StateContext
 import org.springframework.statemachine.StateMachine
@@ -9,6 +10,8 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import org.springframework.statemachine.listener.StateMachineListenerAdapter
 import reactor.core.publisher.Mono
 import xyz.nietongxue.common.base.Stuff
+import xyz.nietongxue.common.taskdag.stringEvent.CommonVars
+import xyz.nietongxue.common.taskdag.stringEvent.setException
 import java.util.concurrent.CountDownLatch
 
 typealias Context = Stuff
@@ -65,7 +68,7 @@ class TasksRuntime<E : Any>(
         dag.validate().getOrThrow()
     }
 
-    val logger = org.slf4j.LoggerFactory.getLogger(TasksRuntime::class.java)
+    val logger = LoggerFactory.getLogger(TasksRuntime::class.java)
 
     val builder = StateMachineBuilder.builder<String, E>()
     val tasksW = dag.tasks.map { TaskWrap(it) }
@@ -117,29 +120,29 @@ class TasksRuntime<E : Any>(
     }
 
 
-
     fun waitForEnd(): Context {
         countdown.await()
         return this.sm.extendedState.variables as Context
     }
 
     fun action(task: Task<E>): Action<String, E> {
-        return object : Action<String, E> {
-            override fun execute(context: StateContext<String, E>?) {
-                logger.debug("executing task ${task.name}")
-                val c = context?.stateMachine?.extendedState?.variables as? Context
-                try {
-                    val (result, effect) = task.action(c ?: emptyMap())
-                    context?.stateMachine?.extendedState?.variables?.putAll(effect)
-                    logger.debug("task ${task.name} executed, result: $result")
-                    context?.stateMachine?.sendEvent(Mono.just(MessageBuilder.withPayload(result).build()))
-                        ?.subscribe()
-                    logger.debug("task ${task.name} event sent")
-                } catch (e: Exception) {
-                    val result = task.exception(c ?: emptyMap(), e)
-                    context?.stateMachine?.sendEvent(Mono.just(MessageBuilder.withPayload(result).build()))
-                        ?.subscribe()
-                }
+        return Action<String, E> { context ->
+            logger.debug("executing task ${task.name}")
+            val c = context?.stateMachine?.extendedState?.variables as? Context ?: emptyMap()
+            try {
+                val (result, effect: Context) = task.action(c)
+                context?.stateMachine?.extendedState?.variables?.putAll(effect)
+                logger.debug("task {} executed, result: {}", task.name, result)
+                context?.stateMachine?.sendEvent(Mono.just(MessageBuilder.withPayload(result).build()))
+                    ?.subscribe()
+                logger.debug("task ${task.name} event sent")
+            } catch (e: Exception) {
+                val result = task.exception(c, e)
+                val effect = c.setException(e)
+                context?.stateMachine?.extendedState?.variables?.putAll(effect)
+                //TODO 这里不需要把 exception 放入到 context？
+                context?.stateMachine?.sendEvent(Mono.just(MessageBuilder.withPayload(result).build()))
+                    ?.subscribe()
             }
         }
     }
