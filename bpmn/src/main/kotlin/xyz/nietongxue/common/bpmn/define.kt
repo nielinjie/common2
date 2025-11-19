@@ -34,6 +34,31 @@ data class SequenceFlow(val name: String, val from: String, val to: String) : Fl
 data class Input(val name: String, val type: String)
 data class Output(val name: String, val type: String)
 
+
+interface HasIO {
+    val inputs: List<Action.Input>
+    val outputs: List<Action.Output>
+}
+
 data class ObjectMethodAction(
-    val clazz: String, val method: String, val inputs: List<Action.Input>, val outputs: List<Action.Output>
-) : Action
+    val clazz: String, val method: String,
+    override val inputs: List<Action.Input>,
+    override val outputs: List<Action.Output>,
+) : Action, HasIO
+
+data class SpringBeanAction(
+    val beanName: String,
+    val clazz: String,
+    val method: String,
+    override val inputs: List<Action.Input>,
+    override val outputs: List<Action.Output>
+) : Action, HasIO
+
+
+//Supported types: [java, spring-bean, ql, mvel, groovy, java-inline, java-source]
+data class ScriptAction(
+    val language: String,
+    val script: String,
+    override val inputs: List<Action.Input>,
+    override val outputs: List<Action.Output>
+) : Action, HasIO

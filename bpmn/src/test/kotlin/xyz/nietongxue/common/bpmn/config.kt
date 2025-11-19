@@ -19,8 +19,16 @@ open class EngineConfig {
 
 
     @Bean
-    open fun processEngine(provider: SpringApplicationContextProvider,invoker: ExtensionInvoker): ProcessEngine<BpmnModel> {
+    open fun processEngine(
+        provider: SpringApplicationContextProvider,
+        invoker: ExtensionInvoker
+    ): ProcessEngine<BpmnModel> {
         val re: ProcessEngine<BpmnModel> = ProcessEngineFactory.createBpmn() as ProcessEngine<BpmnModel>
         return re
+    }
+
+    @Bean(name = ["MyAddBean"])
+    open fun add(): MyAdd {
+        return MyAdd()
     }
 }
