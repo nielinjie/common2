@@ -35,6 +35,7 @@
         <revision>5.0.0-SNAPSHOT</revision> <!-- 统一版本变量 -->
         <flatten.plugin.version>1.7.2</flatten.plugin.version> <!-- 插件版本 -->
         <spring.framework.version>6.2.10</spring.framework.version>
+        <spring.boot.version>3.5.5</spring.boot.version>
         <kotlin.version>2.2.0</kotlin.version>
         <jackson.version>2.19.0</jackson.version>
     </properties>

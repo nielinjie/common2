@@ -14,6 +14,7 @@ interface Gateway : Element
 
 interface Flow : Element
 
+@JsonWithType
 interface Action {
     data class Input(val name: String, val type: String, val contextVarName: String)
     data class Output(val name: String, val type: String, val contextVarName: String)
@@ -62,3 +63,4 @@ data class ScriptAction(
     override val inputs: List<Action.Input>,
     override val outputs: List<Action.Output>
 ) : Action, HasIO
+
