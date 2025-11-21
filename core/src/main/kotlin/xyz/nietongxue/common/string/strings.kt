@@ -3,7 +3,24 @@ package xyz.nietongxue.common.string
 import net.pearx.kasechange.CaseFormat
 import net.pearx.kasechange.toCase
 
+fun String.escape(toType: String = ""): String {
+    if (toType.equals("sql", true)) {
+        return this.escapeSql()
+    }
+    return replace("\n", "\\n").replace("\r", "\\r")
+        .replace("\"", "\\\"").replace("\'", "\\\'")
+        .replace("\t", "\\t").replace("\b", "\\b")
 
+
+}
+
+fun String.escapeSql(): String {
+    return this.replace("'", "''").replace("\\", "\\\\")  // 反斜杠转义
+        .replace("\"", "\\\"")  // 双引号转义
+        .replace("\n", "\\n")   // 换行符转义
+        .replace("\r", "\\r")   // 回车符转义
+        .replace("\t", "\\t")
+}
 
 fun String.subStringList(): List<String> {
     var index = 0
