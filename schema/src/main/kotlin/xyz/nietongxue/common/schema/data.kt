@@ -1,7 +1,6 @@
 package xyz.nietongxue.common.schema
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
-import xyz.nietongxue.common.string.cList
 import xyz.nietongxue.common.json.autoParse.Format
 
 
@@ -65,9 +64,17 @@ interface ConstraintRecognizer {
     fun recognize(textValue: String): Constraint?
 }
 
+/*
+ */
+
 object TypeNameRecognizer : ConstraintRecognizer {
     override fun recognize(textValue: String): Constraint? {
-        val types = "string,number,boolean,any,int".cList()
+        val types = listOf(
+            CommonNamedTypes.STRING,
+            CommonNamedTypes.NUMBER, CommonNamedTypes.BOOLEAN, CommonNamedTypes.ANY,
+            CommonNamedTypes.INT, CommonNamedTypes.LONG, CommonNamedTypes.UUID,
+            CommonNamedTypes.DATETIME, CommonNamedTypes.TIMESTAMP
+        ).map { it.name }
         return types.firstOrNull {
             textValue == it
         }?.let {
@@ -79,7 +86,7 @@ object TypeNameRecognizer : ConstraintRecognizer {
 object RequiredRecognizer : ConstraintRecognizer {
     override fun recognize(textValue: String): Constraint? {
         return if (textValue.lowercase() == "required"
-            || textValue.lowercase() == "notNull".lowercase()
+            || textValue.equals("notNull", ignoreCase = true)
         ) {
             return Required
         } else {
@@ -103,3 +110,10 @@ data class AdditionalProperties(val schema: DataSchema)
 
 
 
+fun PrimitiveSchema.maxLength(): Int? {
+    return this.constraints.filterIsInstance<LengthRange>().firstOrNull()?.max
+}
+
+fun PrimitiveSchema.required(): Boolean {
+    return this.constraints.contains(Required)
+}

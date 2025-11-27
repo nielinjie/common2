@@ -1,4 +1,7 @@
-package xyz.nietongxue.common.base
+package xyz.nietongxue.common.collections
+
+import xyz.nietongxue.common.base.Id
+import xyz.nietongxue.common.base.IdGetter
 
 interface Change {
     object Removed : Change
@@ -12,7 +15,7 @@ interface Diff {
     class Changed(val ids: List<Id>) : Diff
 }
 
-class Diffs(val removed: Diff.Removed, val added: Diff.Added, val changed: Diff.Changed)
+data class Diffs(val removed: Diff.Removed, val added: Diff.Added, val changed: Diff.Changed)
 
 fun <T> diff(fromOld: List<T>, toNew: List<T>, idGetter: IdGetter<T>, isChanged: (T, T) -> Boolean): Diffs {
     val fromIds = fromOld.mapNotNull { idGetter(it) }
