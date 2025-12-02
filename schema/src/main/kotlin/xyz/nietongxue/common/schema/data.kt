@@ -1,16 +1,14 @@
 package xyz.nietongxue.common.schema
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo
+import xyz.nietongxue.common.json.JsonWithType
 import xyz.nietongxue.common.json.autoParse.Format
 
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.CLASS,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type"
-)
+@JsonWithType
 interface DataSchema
 
+//主要用在 json schema 里面。一般的 schema 用 primary？
 data class BooleanSchema(val value: Boolean) : DataSchema
 
 
@@ -36,11 +34,7 @@ data class PrimitiveSchema(val constraints: List<Constraint>) : DataSchema {
 
 //限制
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.CLASS,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "type"
-)
+@JsonWithType
 interface Constraint
 
 data class NamedType(val name: String) : Constraint
@@ -97,7 +91,7 @@ object RequiredRecognizer : ConstraintRecognizer {
 }
 
 
-data class ArraySchema(val itemSchema: DataSchema) : DataSchema
+data class ArraySchema(val itemSchema: DataSchema, val arrayConstraints: List<Constraint> = listOf()) : DataSchema
 data class ObjectSchema(val properties: Map<String, DataSchema>) : DataSchema {
     fun additional(): AdditionalProperties {
         return this.properties["_"]?.let {
@@ -107,7 +101,6 @@ data class ObjectSchema(val properties: Map<String, DataSchema>) : DataSchema {
 }
 
 data class AdditionalProperties(val schema: DataSchema)
-
 
 
 fun PrimitiveSchema.maxLength(): Int? {

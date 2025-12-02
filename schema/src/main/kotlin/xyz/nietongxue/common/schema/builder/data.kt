@@ -8,7 +8,7 @@ import xyz.nietongxue.common.schema.ObjectSchema
 import xyz.nietongxue.common.schema.PrimitiveSchema
 
 fun String.nameType(): PrimitiveSchema {
-    return PrimitiveSchema(listOf(NamedType("string")))
+    return PrimitiveSchema(listOf(NamedType(this)))
 }
 
 fun PrimitiveSchema.and(other: Constraint): PrimitiveSchema {
