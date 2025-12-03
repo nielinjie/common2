@@ -33,7 +33,12 @@ fun Process.toXML(): String {
                     }
                 }
             }
-            this@toXML.elements.forEach {
+            this@toXML.elements.map{
+                when(it) {
+                    is Define -> it.generate()
+                    else -> it
+                }
+            }.forEach {
                 when (it) {
                     is Task -> {
                         if (it.action is ScriptAction) {
@@ -92,7 +97,8 @@ fun Node.io(it: HasIO) {
         "cf:var" {
             attribute("name", it.name)
             attribute("dataType", it.type)
-            attribute("contextVarName", it.contextVarName)
+            it.contextVarName?.also { attribute("contextVarName", it) }
+            it.defaultValue?.also { attribute("defaultValue", it) }
             attribute("inOutType", "param")
         }
     }

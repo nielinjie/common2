@@ -2,9 +2,16 @@ package xyz.nietongxue.common.bpmn
 
 import xyz.nietongxue.common.json.JsonWithType
 
+@JsonWithType
+interface ElementOrDefine
 
 @JsonWithType
-interface Element
+interface Define:ElementOrDefine {
+    fun generate(): Element
+}
+
+@JsonWithType
+interface Element: ElementOrDefine
 
 interface Event : Element
 
@@ -16,14 +23,15 @@ interface Flow : Element
 
 @JsonWithType
 interface Action {
-    data class Input(val name: String, val type: String, val contextVarName: String)
+    //目前可以以有默认值的 inputs 作为 property的模拟。
+    data class Input(val name: String, val type: String, val contextVarName: String?, val defaultValue: String? = null)
     data class Output(val name: String, val type: String, val contextVarName: String)
 }
 
 data class Process(
     val name: String,
     val namespace: String,
-    val elements: List<Element>,
+    val elements: List<ElementOrDefine>,
     val inputs: List<Input>, val outputs: List<Output>
 ) //
 
