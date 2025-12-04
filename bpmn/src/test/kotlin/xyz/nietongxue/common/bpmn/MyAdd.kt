@@ -7,3 +7,11 @@ open class MyAdd {
         return a + b
     }
 }
+
+open class MyAppender {
+    fun append(a: String, b: String,i: Int): String {
+        return "$a append $b".also {
+            println(it)
+        }
+    }
+}

@@ -6,12 +6,14 @@ import xyz.nietongxue.common.json.JsonWithType
 interface ElementOrDefine
 
 @JsonWithType
-interface Define:ElementOrDefine {
-    fun generate(): Element
+interface Define : ElementOrDefine {
+    fun generate(): List<Element>
 }
 
 @JsonWithType
-interface Element: ElementOrDefine
+interface Element : ElementOrDefine {
+    val name: String
+}
 
 interface Event : Element
 
@@ -32,17 +34,32 @@ data class Process(
     val name: String,
     val namespace: String,
     val elements: List<ElementOrDefine>,
-    val inputs: List<Input>, val outputs: List<Output>
-) //
+    val inputs: List<Input> = emptyList(),
+    val outputs: List<Output> = emptyList(),
+    val innerVars: List<InnerVar> = emptyList()
+) {
+    fun getInnerProcess(): InnerProcess {
+        return InnerProcess(name, elements)
+    }
+}//
+
+data class InnerProcess(val name: String, val elements: List<ElementOrDefine>)
 
 
-data class Task(val name: String, val action: Action) : Activity
-data class StartEvent(val name: String) : Event
-data class EndEvent(val name: String) : Event
-data class SequenceFlow(val name: String, val from: String, val to: String) : Flow
+data class Task(override val name: String, val action: Action) : Activity
+data class StartEvent(override val name: String) : Event
+data class EndEvent(override val name: String) : Event
+data class SequenceFlow(override val name: String, val from: String, val to: String) : Flow
 data class Input(val name: String, val type: String)
 data class Output(val name: String, val type: String)
+data class InnerVar(val name: String, val type: String)
 
+data class Loop(
+    override val name: String, val collectionName: String,
+    val itemVarName: String,
+    val indexVarName: String,
+    val itemClazz: String, val subProcess: InnerProcess
+) : Element
 
 interface HasIO {
     val inputs: List<Action.Input>
@@ -51,16 +68,16 @@ interface HasIO {
 
 data class ObjectMethodAction(
     val clazz: String, val method: String,
-    override val inputs: List<Action.Input>,
-    override val outputs: List<Action.Output>,
+    override val inputs: List<Action.Input> = emptyList(),
+    override val outputs: List<Action.Output> = emptyList(),
 ) : Action, HasIO
 
 data class SpringBeanAction(
     val beanName: String,
     val clazz: String,
     val method: String,
-    override val inputs: List<Action.Input>,
-    override val outputs: List<Action.Output>
+    override val inputs: List<Action.Input> = emptyList(),
+    override val outputs: List<Action.Output> = emptyList()
 ) : Action, HasIO
 
 
@@ -68,7 +85,7 @@ data class SpringBeanAction(
 data class ScriptAction(
     val language: String,
     val script: String,
-    override val inputs: List<Action.Input>,
-    override val outputs: List<Action.Output>
+    override val inputs: List<Action.Input> = emptyList(),
+    override val outputs: List<Action.Output> = emptyList()
 ) : Action, HasIO
 

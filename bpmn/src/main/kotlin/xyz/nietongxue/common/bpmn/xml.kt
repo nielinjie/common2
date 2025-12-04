@@ -32,64 +32,90 @@ fun Process.toXML(): String {
                         attribute("inOutType", "return")
                     }
                 }
-            }
-            this@toXML.elements.map{
-                when(it) {
-                    is Define -> it.generate()
-                    else -> it
+                this@toXML.innerVars.forEach {
+                    "cf:var" {
+                        attribute("name", it.name)
+                        attribute("description", it.name)
+                        attribute("dataType", it.type)
+                        attribute("inOutType", "inner")
+                    }
                 }
-            }.forEach {
-                when (it) {
-                    is Task -> {
-                        if (it.action is ScriptAction) {
-                            "scriptTask" {
-                                attribute("name", it.name)
-                                attribute("id", it.name)
-                                attribute("scriptFormat", it.action.language)
-                                "extensionElements" {
-                                    action(it)
-                                }
-                                "script" {
-                                    text(it.action.script)
-                                }
-                            }
-                        } else {
-                            "serviceTask" {
-                                attribute("name", it.name)
-                                attribute("id", it.name)
-                                "extensionElements" {
-                                    action(it)
-                                }
-                            }
-                        }
-                    }
+            }
+            innerProcess(this@toXML.getInnerProcess())
+        }
+    }.toString(true)
+}
 
-                    is StartEvent -> {
-                        "startEvent" {
-                            attribute("name", it.name)
-                            attribute("id", it.name)
+fun Node.innerProcess(process: InnerProcess) {
+    process.elements.flatMap {
+        when (it) {
+            is Define -> it.generate()
+            else -> listOf(it)
+        }
+    }.forEach {
+        when (it) {
+            is Task -> {
+                if (it.action is ScriptAction) {
+                    "scriptTask" {
+                        attribute("name", it.name)
+                        attribute("id", it.name)
+                        attribute("scriptFormat", it.action.language)
+                        "extensionElements" {
+                            action(it)
+                        }
+                        "script" {
+                            cdata(it.action.script)
                         }
                     }
+                } else {
+                    "serviceTask" {
+                        attribute("name", it.name)
+                        attribute("id", it.name)
+                        "extensionElements" {
+                            action(it)
+                        }
+                    }
+                }
+            }
 
-                    is EndEvent -> {
-                        "endEvent" {
-                            attribute("name", it.name)
-                            attribute("id", it.name)
-                        }
-                    }
+            is StartEvent -> {
+                "startEvent" {
+                    attribute("name", it.name)
+                    attribute("id", it.name)
+                }
+            }
 
-                    is SequenceFlow -> {
-                        "sequenceFlow" {
-                            attribute("name", it.name)
-                            attribute("id", it.name)
-                            attribute("sourceRef", it.from)
-                            attribute("targetRef", it.to)
-                        }
+            is EndEvent -> {
+                "endEvent" {
+                    attribute("name", it.name)
+                    attribute("id", it.name)
+                }
+            }
+
+            is SequenceFlow -> {
+                "sequenceFlow" {
+                    attribute("name", it.name)
+                    attribute("id", it.name)
+                    attribute("sourceRef", it.from)
+                    attribute("targetRef", it.to)
+                }
+            }
+
+            is Loop -> {
+                "subProcess" {
+                    attribute("name", it.name)
+                    attribute("id", it.name)
+                    "multiInstanceLoopCharacteristics" {
+                        attribute("cf:collection", it.collectionName)
+                        attribute("cf:elementVar", it.itemVarName)
+                        attribute("cf:indexVar", it.indexVarName)
+                        attribute("cf:elementVarClass", it.itemClazz)
                     }
+                    innerProcess(it.subProcess)
                 }
             }
         }
-    }.toString(true)
+    }
 }
 
 fun Node.io(it: HasIO) {
