@@ -2,10 +2,8 @@ package xyz.nietongxue.common.softdata
 
 import arrow.core.getOrElse
 import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.databind.JsonNode
 import xyz.nietongxue.common.properties.Property
 import xyz.nietongxue.common.schema.ValidateResult
-import xyz.nietongxue.common.schema.validate
 import xyz.nietongxue.common.schema.validateWithData
 
 data class InStructureProperty(val property: Property, val path: TransformPath) {

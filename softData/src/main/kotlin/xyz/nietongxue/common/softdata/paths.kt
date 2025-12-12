@@ -75,7 +75,7 @@ data class TransformPath(val path: List<TransformPathNode>) {
             return TransformPath(path)
         }
 
-        fun parse(jPath: JPath): TransformPath {
+        fun fromJPath(jPath: JPath): TransformPath {
             return TransformPath(jPath.parts.map {
                 when (it) {
                     is JPathNode.NameNode -> TransformPathNode.NamePathNode(it.name)

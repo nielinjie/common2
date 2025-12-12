@@ -7,7 +7,7 @@ import xyz.nietongxue.common.properties.SimpleProperty
 import xyz.nietongxue.common.schema.DataSchema
 
 
-// 一套可变的 property 结构主要用于构建。
+// 一套可变的 property 结构,主要用于构建。
 
 interface BuildingProperty {
     class ObjectBuilding(val properties: MutableMap<String, BuildingProperty>) : BuildingProperty {
