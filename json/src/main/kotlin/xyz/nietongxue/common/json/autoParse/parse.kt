@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode
 
 fun autoParse(json: String): Pair<JsonNode, Format> {
     val formats = listOf<Format>(
-//        RJsonFormat ,
+        RJsonFormat ,
         Json5,NormalJson,Yaml,
     )
 

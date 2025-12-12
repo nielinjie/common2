@@ -47,8 +47,9 @@ object RJsonFormat : Format {
 //        <artifactId>rjson</artifactId>
 //        <version>1.3.1-SNAPSHOT</version>
 //        </dependency>
-        TODO("rjson 貌似死了，相关repository中找不到这个东西了。")
-//        return RJson.rjsonToJackson(RJson.parse(string))
+        // 新的地方在 - https://maven-us.nuxeo.org/nexus/content/repositories/thirdparty-snapshots/tv/twelvetone/rjson/rjson/1.3.1-SNAPSHOT/
+        // google 来的，不一定保险。
+        return RJson.rjsonToJackson(RJson.parse(string))
     }
 
     override fun shortList(string: String): List<String> {
@@ -58,7 +59,7 @@ object RJsonFormat : Format {
 }
 
 
-object Json5:Format {
+object Json5 : Format {
     override fun json(string: String): JsonNode {
         /*
         ALLOW_UNQUOTED_FIELD_NAMES
@@ -68,7 +69,7 @@ object Json5:Format {
         ALLOW_NON_NUMERIC_NUMBERS
         ALLOW_LEADING_DECIMAL_POINT_FOR_NUMBERS
          */
-        val om = jacksonObjectMapper().also{
+        val om = jacksonObjectMapper().also {
             it.enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES)
             it.enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES)
             it.enable(JsonParser.Feature.ALLOW_BACKSLASH_ESCAPING_ANY_CHARACTER)

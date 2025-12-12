@@ -24,7 +24,7 @@ class JsonPathTest {
 
     @Test
     fun parseToJPath() {
-        val path = "\$['children'][0]['name']"
+        val path = "$['children'][0]['name']"
         JPath.parse(JsonPath.compile(path)).also {
             it.toJsonPath().also {
                 assertThat(it).isEqualTo(path)
@@ -74,7 +74,7 @@ class JsonPathTest {
         val jpath = JPath.parse(JsonPath.compile(path))
         val value = "Jack"
         jpath.set(doc, value)
-
+        println(doc.jsonString())
         val string: String = jpath.read(doc, String::class.java)
         assertThat(string).isEqualTo(value)
     }
@@ -135,20 +135,6 @@ class JsonPathTest {
         val on = jacksonObjectMapper().readTree(json)
         val value = jsonPath.read(on) as TextNode
         assertThat(value.textValue()).isEqualTo("Tom")
-
-
-    }
-
-    @Test
-    fun rootTest() {
-        val pathMap = listOf(
-            "\$.front.name" to "\$.name",
-        )
-        val pathMap2 = listOf(
-            "$.front.name" to "$.name",
-        )
-        println(pathMap[0].first)
-        println(pathMap2[0].first)
     }
 
 
@@ -179,7 +165,6 @@ class JsonPathTest {
             println(it)
         }
     }
-
 
 
     @Test

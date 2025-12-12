@@ -1,5 +1,6 @@
 package xyz.nietongxue.common.json
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -10,7 +11,7 @@ fun jo(fu: ObjectNode.() -> Unit = {}): ObjectNode {
     }
 }
 
-fun ja(vararg nodes: ObjectNode): ArrayNode {
+fun ja(vararg nodes: JsonNode): ArrayNode {
     return jacksonObjectMapper().createArrayNode().apply {
         nodes.forEach {
             add(it)
