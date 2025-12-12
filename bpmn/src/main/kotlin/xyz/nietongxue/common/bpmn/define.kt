@@ -1,5 +1,6 @@
 package xyz.nietongxue.common.bpmn
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import xyz.nietongxue.common.json.JsonWithType
 
 @JsonWithType
@@ -24,12 +25,24 @@ interface Gateway : Element
 interface Flow : Element
 
 @JsonWithType
-interface Action {
+interface Action : ActionOrDefine {
     //目前可以以有默认值的 inputs 作为 property的模拟。
-    data class Input(val name: String, val type: String, val contextVarName: String?, val defaultValue: String? = null)
+    data class Input(
+        val name: String,
+        val type: String,
+        val contextVarName: String? = null,
+        val defaultValue: String? = null
+    )
+
     data class Output(val name: String, val type: String, val contextVarName: String)
 }
 
+interface ActionDefine : ActionOrDefine {
+    fun generate(): Action
+}
+
+@JsonWithType
+interface ActionOrDefine
 data class Process(
     val name: String,
     val namespace: String,
@@ -38,6 +51,7 @@ data class Process(
     val outputs: List<Output> = emptyList(),
     val innerVars: List<InnerVar> = emptyList()
 ) {
+    @JsonIgnore
     fun getInnerProcess(): InnerProcess {
         return InnerProcess(name, elements)
     }
@@ -46,7 +60,7 @@ data class Process(
 data class InnerProcess(val name: String, val elements: List<ElementOrDefine>)
 
 
-data class Task(override val name: String, val action: Action) : Activity
+data class Task(override val name: String, val action: ActionOrDefine) : Activity
 data class StartEvent(override val name: String) : Event
 data class EndEvent(override val name: String) : Event
 data class SequenceFlow(override val name: String, val from: String, val to: String) : Flow

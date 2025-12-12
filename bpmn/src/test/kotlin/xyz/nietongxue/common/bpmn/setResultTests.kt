@@ -25,9 +25,9 @@ class SetResultTests {
                 "task1Inner", ObjectMethodAction(
                     "xyz.nietongxue.common.bpmn.MyAppender", "append",
                     inputs = listOf(
+                        Action.Input("i", "java.lang.Integer", "i"),
                         Action.Input("a", "java.lang.String", "p"),
                         Action.Input("b", "java.lang.String", "me"),
-                        Action.Input("i", "java.lang.Integer", "i"),
                     ), outputs = listOf(
                         Action.Output("result", "java.lang.String", "inner_result")
                     )

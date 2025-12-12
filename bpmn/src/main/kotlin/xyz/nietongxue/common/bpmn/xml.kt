@@ -139,12 +139,17 @@ fun Node.io(it: HasIO) {
 }
 
 fun Node.action(it: Task) {
-    when (it.action) {
+    val trueAction: Action = when (it.action) {
+        is Action -> it.action
+        is ActionDefine -> it.action.generate()
+        else -> throw Exception("unsupported action type")
+    }
+    when (trueAction) {
         is ObjectMethodAction -> {
             "cf:action" {
                 attribute("type", "java")
                 "cf:actionHandle" {
-                    it.action.also {
+                    trueAction.also {
                         attribute("clazz", it.clazz)
                         attribute("method", it.method)
                         io(it)
@@ -161,7 +166,7 @@ fun Node.action(it: Task) {
                     "spring-bean"
                 )
                 "cf:actionHandle" {
-                    it.action.also {
+                    trueAction.also {
                         attribute("bean", it.beanName)
                         attribute("clazz", it.clazz)
                         attribute("method", it.method)
@@ -172,7 +177,7 @@ fun Node.action(it: Task) {
         }
 
         is ScriptAction -> {
-            io(it.action)
+            io(trueAction)
         }
 
     }

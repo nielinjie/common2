@@ -9,9 +9,17 @@ open class MyAdd {
 }
 
 open class MyAppender {
-    fun append(a: String, b: String,i: Int): String {
-        return "$a append $b".also {
-            println(it)
-        }
+    fun append(i: Int, a: String, b: String): String {
+        return "No. $i: $a append $b"
+    }
+}
+
+open class MyAppender2 {
+    fun append(a: String, b: String, i: Integer): String {
+        return "No. $i: $a append $b"
+    }
+
+    fun append(a: String, b: String): String {
+        return "No. $a append $b"
     }
 }
