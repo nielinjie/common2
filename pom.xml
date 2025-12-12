@@ -26,6 +26,7 @@
         <module>dsl</module>
         <module>xml</module>
         <module>bpmn</module>
+        <module>softData</module>
     </modules>
 
     <properties>
