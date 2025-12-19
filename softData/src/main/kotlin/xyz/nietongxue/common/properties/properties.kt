@@ -43,7 +43,6 @@ data class ObjectProperty(val properties: Map<Name, Property>) : Property {
         get() {
             return ObjectSchema(properties.mapValues { it.value.schema })
         }
-
 }
 
 data class ArrayProperty(val item: Property) : Property {
