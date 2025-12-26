@@ -10,7 +10,8 @@
         <version>${revision}</version>
     </parent>
 
-    <artifactId>common2.softData</artifactId>
+    <artifactId>common2.scripts</artifactId>
+
 
     <dependencies>
         <dependency>
@@ -20,13 +21,28 @@
         </dependency>
         <dependency>
             <groupId>xyz.nietongxue</groupId>
-            <artifactId>common2.json</artifactId>
+            <artifactId>common2.data</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>xyz.nietongxue</groupId>
-            <artifactId>common2.schema</artifactId>
-            <version>${revision}</version>
+            <groupId>com.alibaba</groupId>
+            <artifactId>qlexpress4</artifactId>
+            <version>4.0.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>5.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-scripting-jsr223</artifactId>
+            <version>${kotlin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-compiler-embeddable</artifactId>
+            <version>${kotlin.version}</version>
         </dependency>
         <dependency>
             <groupId>xyz.nietongxue</groupId>

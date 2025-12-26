@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/bpmn/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/data/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/diagram/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/diagram/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/directive/src/main/kotlin" charset="UTF-8" />
@@ -23,8 +25,8 @@
     <file url="file://$PROJECT_DIR$/processing/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/schema/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/schema/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/softData/src/main/kotlin" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/softData/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/scripts/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/scripts/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/spring/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/kotlin" charset="UTF-8" />
