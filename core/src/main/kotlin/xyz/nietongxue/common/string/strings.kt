@@ -21,6 +21,9 @@ fun String.escapeSql(): String {
         .replace("\r", "\\r")   // 回车符转义
         .replace("\t", "\\t")
 }
+fun String.escapeDollar(): String {
+    return this.replace("$", "\\$")
+}
 
 fun String.subStringList(): List<String> {
     var index = 0

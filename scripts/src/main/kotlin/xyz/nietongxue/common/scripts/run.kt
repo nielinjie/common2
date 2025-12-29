@@ -9,6 +9,8 @@ import kotlin.script.experimental.jsr223.KotlinJsr223DefaultScriptEngineFactory
 
 typealias RunResult = Pair<Any, Stuff>
 
+/// ** 只有一些 facade，主要是把一些依赖封装。
+///
 
 fun ql4Run(script: String, context: Stuff, type: String = "ql4"): RunResult {
     val express4Runner = Express4Runner(InitOptions.builder().securityStrategy(QLSecurityStrategy.open()).build())
@@ -25,7 +27,7 @@ fun groovyRun(script: String, context: Stuff): RunResult {
 }
 
 fun kotlinRun(script: String, context: Stuff): RunResult {
-    val engine = KotlinJsr223DefaultScriptEngineFactory().getScriptEngine().also {
+    val engine = KotlinJsr223DefaultScriptEngineFactory().getScriptEngine() .also {
         context.forEach { (string, any) -> it.put(string, any) }
     }
     val result = engine.eval(script)

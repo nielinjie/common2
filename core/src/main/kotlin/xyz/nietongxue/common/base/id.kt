@@ -40,6 +40,7 @@ fun id(idCreateStrategy: IdCreateStrategy = IdCreateStrategy.V7): Id {
 
 fun randomId(): Id = UUID().toString()
 
-fun String.v3():Id = id(IdCreateStrategy.V3(this))
+fun String.v3(): Id = id(IdCreateStrategy.V3(this))
+
 @OptIn(UUIDExperimentalAPI::class)
 fun v7(): Id = UUIDv7(Clock.System.now().toEpochMilliseconds()).toString() // apply v7 uuid

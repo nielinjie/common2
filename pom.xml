@@ -27,6 +27,7 @@
         <module>xml</module>
         <module>bpmn</module>
         <module>data</module>
+        <module>sql</module>
         <module>scripts</module>
     </modules>
 
