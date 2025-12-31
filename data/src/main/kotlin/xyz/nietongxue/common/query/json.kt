@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.node.TextNode
 
 
 /*
-一种 json 形式的简写。不是直接的 deserialize
+一种自然形式的简写。不是直接的 deserialize
  */
 /*
     and: {
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.databind.node.TextNode
     }
     */
 
-fun jsonToFilter(json: ArrayNode): Filter {
+fun natureJsonToFilter(json: ArrayNode): Filter {
 
     fun toValueType(json: JsonNode): Pair<Any, String>? {
         return when (json) {
@@ -85,18 +85,21 @@ fun jsonToFilter(json: ArrayNode): Filter {
 }
 
 
-fun jsonToQuery(json: ObjectNode): Query {
+fun natureJsonToQuery(json: ObjectNode): Query {
     val filter = (json.get("filter") as? ArrayNode)?.let {
-        jsonToFilter(it)
+        natureJsonToFilter(it)
     }
     val sort: Sort? = (json.get("sort") as? ObjectNode)?.let {
         it.properties().map {
-            SortPiece(it.key, Direction.valueOf(it.value.asText()))
+            SortPiece(it.key, Direction.valueOf(it.value.asText().uppercase()))
         }
 
     }
     val page = (json.get("page") as? ObjectNode)?.let {
-        Paging(it.get("pageIndex").asInt(), it.get("pageSize").asInt())
+        Paging(
+            (it.get("pageIndex") ?: it.get("index"))?.asInt() ?: 0,
+            (it.get("pageSize") ?: it.get("size"))?.asInt() ?: 100
+        )
     }
     return Query(filter, sort, page)
 }

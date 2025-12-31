@@ -38,7 +38,7 @@ class FilterTest {
             [{and: {foo.bar : {eq: "Alice"}}}] 
         """.trimIndent()
         val filterJson = autoParse(simpleFilter)
-        val filter = jsonToFilter(filterJson.first as ArrayNode)
+        val filter = natureJsonToFilter(filterJson.first as ArrayNode)
         pretty(filter)
     }
 }

@@ -9,6 +9,7 @@ import xyz.nietongxue.common.query.Paging
 import xyz.nietongxue.common.query.PieceType
 import xyz.nietongxue.common.query.Query
 import xyz.nietongxue.common.query.Sort
+import xyz.nietongxue.common.schema.CommonNamedTypes
 import xyz.nietongxue.common.string.escape
 import xyz.nietongxue.common.string.wrapBy
 import xyz.nietongxue.common.string.replacePlaceholders
@@ -26,7 +27,8 @@ object QueryToSql {
     fun filterPieceCondition(piece: FilterPiece): String =
         piece.fieldName.let {
             val rhs: String = when (piece.type) {
-                "string" -> (piece.value.toString()).escape("sql").wrapBy("\"")
+                CommonNamedTypes.STRING.name -> (piece.value.toString()).escape("sql").wrapBy("'") //TODO common type names
+//                CommonNamedTypes.TIMESTAMP.name -> piece.value.toString()
                 else -> piece.value.toString()
             }
             val oper = when (piece.operator) {
@@ -63,7 +65,7 @@ object QueryToSql {
             }
         }
 
-        fun page(paging: Paging): String = " offset " + paging.pageIndex * paging.pageSize + " limit " + paging.pageSize
+        fun page(paging: Paging): String = " limit " + paging.pageSize + " offset " + paging.pageIndex * paging.pageSize
         return QuerySqlStatements(
             query.filter?.let { if (it.isEmpty()) "" else where(it) } ?: "",
             query.sort?.let(::order) ?: "",
@@ -72,10 +74,13 @@ object QueryToSql {
     }
 
 }
-fun injectToSql(statements: QuerySqlStatements,sql:String):String{
-    return replacePlaceholders(sql,mapOf(
-        "where" to statements.where,
-        "order" to statements.order,
-        "page" to statements.page
-    ))
+
+fun injectToSql(statements: QuerySqlStatements, sql: String): String {
+    return replacePlaceholders(
+        sql, mapOf(
+            "where" to statements.where,
+            "order" to statements.order,
+            "page" to statements.page
+        )
+    )
 }

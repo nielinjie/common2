@@ -1,6 +1,7 @@
 package xyz.nietongxue.common.query
 
 import xyz.nietongxue.common.json.JsonWithType
+import xyz.nietongxue.common.schema.CommonNamedTypes
 
 
 /*
@@ -24,7 +25,7 @@ data class FilterPiece(
     val fieldName: String,
     val operator: Operator,
     val value: Any,
-    val type: String = "string",
+    val type: String = CommonNamedTypes.STRING.name, //TODO common type names
     val pieceType: PieceType,
     val entityName: String? = null
 )
