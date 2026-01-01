@@ -84,16 +84,25 @@ fun natureJsonToFilter(json: ArrayNode): Filter {
     }
 }
 
+/*
 
+
+ */
 fun natureJsonToQuery(json: ObjectNode): Query {
     val filter = (json.get("filter") as? ArrayNode)?.let {
         natureJsonToFilter(it)
     }
-    val sort: Sort? = (json.get("sort") as? ObjectNode)?.let {
-        it.properties().map {
+
+    fun objectToPiece(json: ObjectNode): List<SortPiece> {
+        return json.properties().map {
             SortPiece(it.key, Direction.valueOf(it.value.asText().uppercase()))
         }
+    }
 
+    val sort: Sort? = ((json.get("sort") ?: json.get("order")) as? ArrayNode)?.let {
+        it.mapNotNull { (it as? ObjectNode)?.let { objectToPiece(it) } }.flatten()
+    } ?: ((json.get("sort") ?: json.get("order")) as? ObjectNode)?.let {
+        objectToPiece(it)
     }
     val page = (json.get("page") as? ObjectNode)?.let {
         Paging(
