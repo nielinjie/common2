@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.springframework.util.LinkedMultiValueMap
 import org.springframework.util.MultiValueMap
 import xyz.nietongxue.common.base.Stuff
+import xyz.nietongxue.common.collections.toJsonStringForAny
 import kotlin.collections.iterator
 
 
@@ -80,14 +81,18 @@ fun List<Any>.toJsonStringForAny(): String {
 
 
 fun Any.toJsonString(pretty: Boolean = false): String {
-    return jacksonObjectMapper().valueToTree<ObjectNode>(this).let {
-        if (pretty) {
-            it.toPrettyString()
-        } else {
-            it.toString()
+    return if (this is List<*>)
+        (this as List<Any>).toJsonStringForAny()
+    else
+        jacksonObjectMapper().valueToTree<ObjectNode>(this).let {
+            if (pretty) {
+                it.toPrettyString()
+            } else {
+                it.toString()
+            }
         }
-    }
 }
+
 
 fun <T : Any> List<Pair<T, Any?>>.toNotNullMap(): Map<T, Any> {
     return this.filter { it.second != null }.associate { it.first to it.second!! }
