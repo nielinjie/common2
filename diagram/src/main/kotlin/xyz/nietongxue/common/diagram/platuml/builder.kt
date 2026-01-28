@@ -1,9 +1,6 @@
 package xyz.nietongxue.common.diagram.platuml
 
 
-
-
-
 /*
 actor actor
 agent agent
@@ -29,15 +26,16 @@ usecase usecase
  */
 
 
-fun UmlBuilder.component(name: String) {
-    this.element(name, "component")
+fun UmlElementsBuilder.component(name: String, appearanceBuilding: AppearanceBuilder.() -> Unit = {}) {
+    this.element(name, "component", appearanceBuilding)
 }
 
-fun UmlBuilder.entity(name: String) {
-    this.element(name, "entity")
+fun UmlElementsBuilder.entity(name: String, appearanceBuilding: AppearanceBuilder.() -> Unit = {}) {
+    this.element(name, "entity", appearanceBuilding)
 }
-fun UmlBuilder.file(name: String) {
-    this.element(name, "file")
+
+fun UmlElementsBuilder.file(name: String, appearanceBuilding: AppearanceBuilder.() -> Unit = {}) {
+    this.element(name, "file", appearanceBuilding)
 }
 
 /*
@@ -62,20 +60,37 @@ storage storage
  */
 
 
-fun UmlBuilder.database(name: String, fn: UmlBuilder.() -> Unit) {
-    this.container(name, "database", fn)
+fun UmlElementsBuilder.database(
+    name: String,
+    appearanceBuilding: AppearanceBuilder.() -> Unit = {},
+    fn: UmlElementsBuilder.() -> Unit,
+) {
+    this.container(name = name, type = "database", appearanceBuilding, fn = fn)
 }
 
-fun UmlBuilder.folder(name: String, fn: UmlBuilder.() -> Unit) {
-    this.container(name, "folder", fn)
+fun UmlElementsBuilder.folder(
+    name: String,
+    appearanceBuilding: AppearanceBuilder.() -> Unit = {}, fn: UmlElementsBuilder.() -> Unit,
+
+    ) {
+    this.container(name, "folder", appearanceBuilding, fn = fn)
 }
-fun UmlBuilder.component(name: String, fn: UmlBuilder.() -> Unit) {
-    this.container(name, "component", fn)
+
+fun UmlElementsBuilder.component(
+    name: String,
+    appearanceBuilding: AppearanceBuilder.() -> Unit = {},
+    fn: UmlElementsBuilder.() -> Unit
+) {
+    this.container(name, "component", appearanceBuilding, fn = fn)
 }
 
 
-fun UmlBuilder.`package`(name: String, fn: UmlBuilder.() -> Unit){
-    this.container(name, "package", fn)
+fun UmlElementsBuilder.`package`(
+    name: String,
+    appearanceBuilding: AppearanceBuilder.() -> Unit = {},
+    fn: UmlElementsBuilder.() -> Unit
+) {
+    this.container(name, "package", appearanceBuilding, fn = fn)
 }
 
 

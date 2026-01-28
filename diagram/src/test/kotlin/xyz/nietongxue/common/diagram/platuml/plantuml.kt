@@ -172,16 +172,17 @@ class PlantUmlTest {
             folder("folder") {
                 file("file")
             }
-            component("component0"){
+            container("component0", "component") {
                 component("component2")
             }
             link("a", "e")
-            link("file", "e", fromToLabel = "file" to "e")
+            link("file", "e") { labelAtHead = "file" to "e" }
         }).also {
             println(it)
             imageDisplay(it)
         }
     }
+
     @Test
     fun testBuildingGraph() {
         uml {
@@ -194,11 +195,11 @@ class PlantUmlTest {
             folder("folder") {
                 file("file")
             }
-            component("component0"){
+            container("component0", "component") {
                 component("component2")
             }
             link("a", "e")
-            link("file", "e", fromToLabel = "file" to "e")
+            link("file", "e") { labelAtHead = "file" to "e" }
         }.also {
             toGraph(it).also {
                 println(it)
@@ -218,11 +219,11 @@ class PlantUmlTest {
             folder("folder") {
                 file("file")
             }
-            component("component0"){
+            container("component0", "component") {
                 component("component2")
             }
             link("a", "e")
-            link("file", "e", fromToLabel = "file" to "e")
+            link("file", "e") { labelAtHead = "file" to "e" }
         }.also {
             openImage(PlantUmlClient().image(plantuml(it)))
         }
