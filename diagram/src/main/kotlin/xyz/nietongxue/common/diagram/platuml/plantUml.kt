@@ -14,6 +14,7 @@ import java.awt.Desktop
 import java.io.ByteArrayOutputStream
 import java.net.URI
 
+
 fun encode(umlString: String): String {
     val t: Transcoder = TranscoderUtil.getDefaultTranscoder()
     return t.encode(umlString)
@@ -46,6 +47,68 @@ fun browser(umlString: String) {
     }
 }
 
+/**
+ * 强类型为了助记，不为了限制。因为没有例举完全。
+ */
+
+object NodeTypeNames{
+
+
+    val actor = "actor"
+    val agent = "agent"
+    val artifact = "artifact"
+    val boundary = "boundary"
+    val card = "card"
+    val cloud = "cloud"
+    val component = "component"
+    val control = "control"
+    val database = "database"
+    val entity = "entity"
+    val file = "file"
+    val folder = "folder"
+    val frame = "frame"
+    val `interface` = "interface"
+    val node = "node"
+    val queue = "queue"
+    val stack = "stack"
+    val rectangle = "rectangle"
+    val storage = "storage"
+    val usecase = "usecase"
+    val `package` = "package"
+
+
+}
+object EdgeTypeNames{
+    val arrow = "arrow"
+    val dashedLine = "dashedLine"
+    val solidLine = "solidLine"
+    val association = "association"
+    val composition = "composition"
+    val aggregation = "aggregation"
+    val dependency = "dependency"
+    val extension = "extension"
+    val implementation = "implementation"
+}
+object ContainerTypeNames{
+
+    val artifact = "artifact"
+    val card = "card"
+    val cloud = "cloud"
+    val component = "component"
+    val database = "database"
+    val file = "file"
+    val folder = "folder"
+    val frame = "frame"
+    val hexagon = "hexagon"
+    val node = "node"
+    val `package` = "package"
+    val queue = "queue"
+    val rectangle = "rectangle"
+    val stack = "stack"
+    val storage = "storage"
+
+}
+
 @JsonWithType
 sealed interface Uml {
 
@@ -63,14 +126,14 @@ sealed interface Uml {
      */
     data class Element(
         val name: String,
-        val type: String = "rectangle",
+        val type: String = NodeTypeNames.rectangle,
         val text: String = name,
         val stereotype: String? = null
     ) : Uml
 
     data class Container(
         val name: String,
-        val type: String = "rectangle",
+        val type: String = ContainerTypeNames.rectangle,
         val text: String = name,
         val stereotype: String? = null,
         val units: List<Uml> = emptyList()
@@ -82,7 +145,7 @@ sealed interface Uml {
     data class Link(
         val from: String,
         val to: String,
-        val type: String = "-->",
+        val type: String = EdgeTypeNames.arrow,
         val text: String = "",
         val fromToLabel: Pair<String, String> = "" to ""
     ) : Uml
@@ -103,6 +166,22 @@ fun plantuml(uml: Uml): String {
 
 fun plantumlImpl(uml: Uml): String {
 
+
+    fun String.transformToSymbol(): String {
+        return when (this) {
+            "arrow" -> "-->"
+            "dashedLine" -> ".."
+            "solidLine" -> "--"
+            "association" -> "..>"
+            "composition" -> "*--"
+            "aggregation" -> "o--"
+            "dependency" -> "--> "
+            "extension" -> "<|--"
+            "implementation" -> "<|.."
+            else -> this
+        }
+    }
+
     fun String.wrapIfNotEmpty(): String {
         return if (this.isNotEmpty()) this.wrapBy("\"") else ""
     }
@@ -111,7 +190,7 @@ fun plantumlImpl(uml: Uml): String {
             uml.stereotype?.let { "<<$it>>" }.orEmpty()
         }"
 
-        is Uml.Link -> "${uml.from.md5()} ${uml.fromToLabel.first.wrapIfNotEmpty()} ${uml.type} ${
+        is Uml.Link -> "${uml.from.md5()} ${uml.fromToLabel.first.wrapIfNotEmpty()} ${uml.type.transformToSymbol()} ${
             uml.fromToLabel.second.wrapIfNotEmpty()
         } ${uml.to.md5()} : ${uml.text.wrapBy("\"")}"
 
@@ -171,7 +250,7 @@ class UmlElementsBuilder {
         from: String,
         to: String,
         type: String = "-->",
-        appearanceBuilding: AppearanceBuilder.() -> Unit ={}
+        appearanceBuilding: AppearanceBuilder.() -> Unit = {}
     ) {
         val appear = AppearanceBuilder().apply(appearanceBuilding)
         elements.add(
