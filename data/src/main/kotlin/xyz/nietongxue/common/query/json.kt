@@ -28,6 +28,7 @@ fun natureJsonToFilter(json: ArrayNode): Filter {
             is IntNode -> json.asInt() to "number"
             is NumericNode -> json.asDouble() to "number"
             is BooleanNode -> json.asBoolean() to "boolean"
+            is ArrayNode -> json.toList().map { toValueType(it)!!.first } to "array"
             else -> null
         }
     }
@@ -39,6 +40,7 @@ fun natureJsonToFilter(json: ArrayNode): Filter {
                 "ne" -> Operator.NotEqual to (toValueType(it.value) ?: error("unknown value and type"))
                 "gt" -> Operator.GreaterThan to (toValueType(it.value) ?: error("unknown value and type"))
                 "lt" -> Operator.LessThan to (toValueType(it.value) ?: error("unknown value and type"))
+                "in" -> Operator.ContainedIn to (toValueType(it.value) ?: error("unknown value and type"))
                 else -> null
             }
         }

@@ -6,6 +6,9 @@ data class Query(
     val paging: Paging?,
 )
 
+fun Query.addFilter(filter: Filter): Query {
+    return this.copy(filter = (this.filter ?: emptyList()).plus(filter))
+}
 typealias Sort = List<SortPiece>
 
 data class SortPiece(

@@ -42,6 +42,15 @@ class FilterTest {
         val filter = natureJsonToFilter(filterJson.first as ArrayNode)
         pretty(filter)
     }
+    @Test
+    fun testInArray() {
+        val simpleFilter = """
+            [{and: {foo.bar : {in: [Alice]}}}] 
+        """.trimIndent()
+        val filterJson = autoParse(simpleFilter)
+        val filter = natureJsonToFilter(filterJson.first as ArrayNode)
+        pretty(filter)
+    }
 
 
     @Test
