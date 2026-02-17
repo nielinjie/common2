@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo
 @MustBeDocumented
 @JacksonAnnotationsInside
 @JsonTypeInfo(
-    use = JsonTypeInfo.Id.MINIMAL_CLASS,
+    use = JsonTypeInfo.Id.CLASS,
     include = JsonTypeInfo.As.PROPERTY,
     property = "_type"
 )
