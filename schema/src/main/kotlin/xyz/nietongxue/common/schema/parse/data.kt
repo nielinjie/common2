@@ -13,6 +13,7 @@ import xyz.nietongxue.common.schema.PrimitiveSchema
 import xyz.nietongxue.common.json.autoParse.Format
 import xyz.nietongxue.common.json.autoParse.autoParse
 
+@Deprecated("内部使用，外部请使用 parseDataSchema ")
 fun parseData(json: JsonNode, format: Format): DataSchema {
     return when (json) {
         is BooleanNode -> BooleanSchema(json.booleanValue())
@@ -30,12 +31,22 @@ fun parseData(json: JsonNode, format: Format): DataSchema {
     }
 }
 
+
+@Deprecated("内部使用，外部请使用 parseDataSchema ")
 fun parseData(json: String, format: Format? = null): DataSchema {
     return if (format == null) autoParse(json).let {
         parseData(it.first, it.second)
     } else {
         parseData(format.json(json), format)
     }
+}
+
+/**
+ * 主要对外方法
+ * jsonString 可以是 json、json5、rjson、yaml等。
+ */
+fun parseDataSchema(jsonString: String): DataSchema {
+    return parseData(jsonString)
 }
 
 

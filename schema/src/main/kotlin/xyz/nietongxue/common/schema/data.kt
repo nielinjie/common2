@@ -5,10 +5,16 @@ import xyz.nietongxue.common.json.JsonWithType
 import xyz.nietongxue.common.json.autoParse.Format
 
 
+annotation class Schema(
+    val name: String,
+    val description: String,
+    val dataSchema: String,
+)
+
 @JsonWithType
 interface DataSchema
 
-//主要用在 json schema 里面。一般的 schema 用 primary？
+//主要用在 json schema 里面。一般的 schema 用 primary
 data class BooleanSchema(val value: Boolean) : DataSchema
 
 

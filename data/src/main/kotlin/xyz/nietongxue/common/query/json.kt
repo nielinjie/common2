@@ -9,16 +9,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
 
 
-/*
+/**
 一种自然形式的简写。不是直接的 deserialize
- */
-/*
+```
     and: {
         name : {
             eq : "Alice"
         }
     }
-    */
+ ```
+ */
 
 fun natureJsonToFilter(json: ArrayNode): Filter {
 
