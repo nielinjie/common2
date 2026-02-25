@@ -14,11 +14,14 @@ import org.springframework.util.LinkedMultiValueMap
 理解这些概念的异同，有助于你在设计系统、编写代码或进行技术交流时，更精确地使用术语，从而提升沟通效率和设计质量。
  */
 
+// 注意，虽然这里是Any，但可能需要在使用端考虑序列化的问题，
+// 如果 labels 作为一个整体来序列化，其中的各个 value 不太可能被分辨为不同的类来序列化。
+// 可能需要考虑使用json来统一序列化。
+typealias Labels = MutableMap<String, Any>
 
-typealias Labels = LinkedMultiValueMap<String, Any>
 
 interface HasLabels {
     val labels: Labels
 }
 
-fun emptyLabels() = LinkedMultiValueMap<String, Any>()
+fun emptyLabels() = mutableMapOf<String, Any>()
