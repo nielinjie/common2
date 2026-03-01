@@ -23,6 +23,15 @@ interface ResponseChain<R, T> {
             }
         }
     }
+    fun resultOrNull(request: R): T? {
+        return handle(request).let {
+            when (it) {
+                is ResponseChainResult.Done -> it.result
+                is ResponseChainResult.Error -> null
+                else -> null
+            }
+        }
+    }
 }
 
 interface ResponseChainWorker<R, T> {

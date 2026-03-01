@@ -5,7 +5,7 @@ import xyz.nietongxue.common.schema.CommonNamedTypes
 
 
 /*
-0. json 形式：这个形式跟 array 形式没啥区别好像。
+0. nature 形式：这个形式跟 array 形式没啥区别好像。
     [
         and: {
             name : {
@@ -13,10 +13,15 @@ import xyz.nietongxue.common.schema.CommonNamedTypes
             }
         }
     ]
+0.5 object 形式：
+    [
+        {pieceType: and, fieldName: name, operator: eq, value: Alice}
+    ]
 1. array 形式：
     [[and, name, eq, Alice],[and , age, gt, 18, number]]
 2. cypher 形式
     true and name = 'Alice' and age > 18
+
  */
 
 typealias Filter = List<FilterPiece>

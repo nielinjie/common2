@@ -7,17 +7,20 @@ import com.fasterxml.jackson.databind.node.IntNode
 import com.fasterxml.jackson.databind.node.NumericNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.databind.node.TextNode
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.treeToValue
+import org.slf4j.Logger
 
 
 /**
 一种自然形式的简写。不是直接的 deserialize
 ```
-    and: {
-        name : {
-            eq : "Alice"
-        }
-    }
- ```
+and: {
+name : {
+eq : "Alice"
+}
+}
+```
  */
 
 fun natureJsonToFilter(json: ArrayNode): Filter {
@@ -113,4 +116,13 @@ fun natureJsonToQuery(json: ObjectNode): Query {
         )
     }
     return Query(filter, sort, page)
+}
+
+fun autoTryToQuery(json: ObjectNode): Query {
+    val om = jacksonObjectMapper()
+    return runCatching {
+        om.treeToValue<Query>(json)
+    }.getOrElse {
+        natureJsonToQuery(json)
+    }
 }
