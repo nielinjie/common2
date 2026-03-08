@@ -44,6 +44,7 @@ fun natureJsonToFilter(json: ArrayNode): Filter {
                 "gt" -> Operator.GreaterThan to (toValueType(it.value) ?: error("unknown value and type"))
                 "lt" -> Operator.LessThan to (toValueType(it.value) ?: error("unknown value and type"))
                 "in" -> Operator.ContainedIn to (toValueType(it.value) ?: error("unknown value and type"))
+                "like" -> Operator.Like to (toValueType(it.value) ?: error("unknown value and type"))
                 else -> null
             }
         }
