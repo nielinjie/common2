@@ -4,11 +4,14 @@ import java.io.File
 import java.util.Base64
 
 fun ByteArray.dataUri(mimeType: String): String {
-    return "data:$mimeType;base64,${this.base64()}"
+    return "data:$mimeType;base64,${this.base64()}" //NOTE 这里忽略了 urlsafe 问题。 假设，datauri 本身不会放在 url 中。
 }
 
-fun ByteArray.base64(): String {
-    return Base64.getEncoder().encodeToString(this)
+fun ByteArray.base64(urlSafe: Boolean = false): String {
+    return (
+            if (urlSafe) Base64.getUrlEncoder()
+            else Base64.getEncoder()
+            ).encodeToString(this)
 }
 
 
@@ -17,8 +20,8 @@ fun ByteArray.tempFile(prefix: String = "any", suffix: String): File {
     return tempFile
 }
 
-fun String.decodeBase64(): ByteArray {
-    return Base64.getDecoder().decode(this)
+fun String.decodeBase64(urlSafe: Boolean = false): ByteArray {
+    return (if (urlSafe) Base64.getUrlDecoder() else Base64.getDecoder()).decode(this)
 }
 
 fun String.parseDataUri(): Pair<String, ByteArray> {
