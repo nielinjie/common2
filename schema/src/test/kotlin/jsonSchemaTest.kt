@@ -14,6 +14,7 @@ class JsonSchemaTest {
         val json = schema.toJsonSchema()
         println(json)
     }
+
     @Test
     fun testJsonSchema2() {
         val schema = ArraySchema().also {
@@ -24,4 +25,17 @@ class JsonSchemaTest {
         val json = schema.toJsonSchema()
         println(json)
     }
+
+//    @Test
+//    fun testJsonSchemaObj() {
+//        val schema = Schema<Any>().also {
+//            it.addProperty("name", Schema<Any>().also { it.addType("string") })
+//            it.addProperty("age", Schema<Any>().also {
+//                it.addType("number")
+//                it.dependentRequired
+//            })
+//        }
+//        val json = schema.toJsonSchema()
+//        println(json)
+//    }
 }

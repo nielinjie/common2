@@ -48,7 +48,7 @@ fun ByteArray.sha256(): String {
 /*
 
  */
-fun parasSignature(paras: List<Pair<String, String>>, urlSafe: Boolean): String {
+fun parasSignature(paras: List<Pair<String, String>>, urlSafe: Boolean = false): String {
     val parasString = paras.joinToString("&") {
         "${it.first}=${it.second}"
     }
