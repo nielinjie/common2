@@ -30,10 +30,16 @@ data class FilterPiece(
     val fieldName: String,
     val operator: Operator,
     val value: Any,
-    val type: String = CommonNamedTypes.STRING.name, //TODO common type names
+    val valueType: String = CommonNamedTypes.STRING.name, //TODO common type names
+    val fieldType: String? = null,
     val pieceType: PieceType,
     val entityName: String? = null
-)
+) {
+    init {
+        //TODO 增加一些验证，比如 operator、fieldType、valueType、value的适配性。
+
+    }
+}
 
 @JsonWithType
 interface Operator {
@@ -41,8 +47,35 @@ interface Operator {
     data object NotEqual : Operator
     data object GreaterThan : Operator
     data object LessThan : Operator
+    data object GreaterThanOrEqual : Operator
+    data object LessThanOrEqual : Operator
     data object ContainedIn : Operator
     data object Like : Operator
+    data object Between : Operator
+    data object IsNull : Operator
+    data object IsNotNull : Operator
+
+    fun validateWithValueAndType(valueAndTypeName: ValueAndTypeName) {
+        when (this) {
+            ContainedIn -> require(
+                valueAndTypeName.second in listOf(
+                    CommonNamedTypes.STRING.name,
+                    CommonNamedTypes.ARRAY.name
+                )
+            ) {
+                "operator containedIn value must be string or array, but ${valueAndTypeName.second} got"
+            }
+
+            Like -> require(valueAndTypeName.second == CommonNamedTypes.STRING.name) {
+                "operator like value must be string, but ${valueAndTypeName.second} got"
+            }
+
+            Between -> require(valueAndTypeName.second == CommonNamedTypes.ARRAY.name && (valueAndTypeName.first as List<*>).size == 2) {
+                "operator between value must be array, and it size is 2, but ${valueAndTypeName.second} got"
+            }
+
+        }
+    }
 }
 
 fun Operator.toNatureString(): String {
@@ -51,8 +84,13 @@ fun Operator.toNatureString(): String {
         Operator.NotEqual -> "!="
         Operator.GreaterThan -> ">"
         Operator.LessThan -> "<"
+        Operator.GreaterThanOrEqual -> ">="
+        Operator.LessThanOrEqual -> "<="
         Operator.ContainedIn -> "in"
         Operator.Like -> "like"
+        Operator.Between -> "between"
+        Operator.IsNull -> "isNull"
+        Operator.IsNotNull -> "isNotNull"
         else -> error("unknown operator")
     }
 }

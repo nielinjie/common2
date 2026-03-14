@@ -42,6 +42,7 @@ class FilterTest {
         val filter = natureJsonToFilter(filterJson.first as ArrayNode)
         pretty(filter)
     }
+
     @Test
     fun testInArray() {
         val simpleFilter = """
@@ -54,33 +55,56 @@ class FilterTest {
 
 
     @Test
-    fun testSort() {
-        val sort = """
-            {sort:{name: asc}}
+    fun testMorePieceMode() {
+        val simpleFilter = """
+            [{and: {name: {eq: "Alice"}, age : {ge: 18, le: 21}}}] 
         """.trimIndent()
-        val result = autoParse(sort).let {
-            natureJsonToQuery(it.first as ObjectNode)
-        }
-        println(result)
+        val filterJson = autoParse(simpleFilter)
+        val filter = natureJsonToFilter(filterJson.first as ArrayNode)
+        pretty(filter)
     }
+
     @Test
-    fun testSort2() {
-        val sort = """
-            {order:{name: asc,age: desc}}
+    fun testException() {
+        val simpleFilter = """
+            [{and: {name: {edq: "Alice"}, age : {ge: 18, le: 21}}}] 
         """.trimIndent()
-        val result = autoParse(sort).let {
-            natureJsonToQuery(it.first as ObjectNode)
-        }
-        println(result)
+        val filterJson = autoParse(simpleFilter)
+
+        val filter = runCatching { natureJsonToFilter(filterJson.first as ArrayNode) }.getOrElse(
+            {
+                println(it)
+            }
+        )
     }
+
     @Test
-    fun testSort3() {
-        val sort = """
-            {order:[{name: asc},{age: desc}]}
+    fun testException2() {
+        val simpleFilter = """
+            [[{and: {name: {edq: "Alice"}, age : {ge: 18, le: 21}}}]] 
         """.trimIndent()
-        val result = autoParse(sort).let {
-            natureJsonToQuery(it.first as ObjectNode)
-        }
-        println(result)
+        val filterJson = autoParse(simpleFilter)
+
+        val filter = runCatching { natureJsonToFilter(filterJson.first as ArrayNode) }.getOrElse(
+            {
+                println(it)
+            }
+        )
     }
+
+    @Test
+    fun testException3() {
+        val simpleFilter = """
+            [{and: {name: {like: 32}, age : {ge: 18, le: 21}}}] 
+        """.trimIndent()
+        val filterJson = autoParse(simpleFilter)
+
+        val filter = runCatching { natureJsonToFilter(filterJson.first as ArrayNode) }.getOrElse(
+            {
+                println(it)
+            }
+        )
+    }
+
+
 }

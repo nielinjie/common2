@@ -29,12 +29,28 @@ interface CommonNamedTypes {
         override val name: String = "uuid"
     }
 
+    object DATE : CommonNamedTypes {
+        override val name: String = "date"
+    }
+
     object DATETIME : CommonNamedTypes {
         override val name: String = "datetime"
     }
 
     object TIMESTAMP : CommonNamedTypes {
         override val name: String = "timestamp"
+    }
+
+    object ARRAY : CommonNamedTypes {
+        override val name: String = "array"
+    }
+
+    object OBJECT : CommonNamedTypes {
+        override val name: String = "object"
+    }
+
+    object TIME : CommonNamedTypes {
+        override val name: String = "time"
     }
 
     val name: String

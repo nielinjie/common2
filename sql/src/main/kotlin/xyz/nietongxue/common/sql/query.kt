@@ -26,8 +26,9 @@ data class QuerySqlStatements(
 object QueryToSql {
     fun filterPieceCondition(piece: FilterPiece): String =
         piece.fieldName.let {
-            val rhs: String = when (piece.type) {
-                CommonNamedTypes.STRING.name -> (piece.value.toString()).escape("sql").wrapBy("'") //TODO common type names
+            val rhs: String = when (piece.valueType) {
+                CommonNamedTypes.STRING.name -> (piece.value.toString()).escape("sql")
+                    .wrapBy("'") //TODO common type names
 //                CommonNamedTypes.TIMESTAMP.name -> piece.value.toString()
                 else -> piece.value.toString()
             }
@@ -38,7 +39,7 @@ object QueryToSql {
                 Operator.NotEqual -> " != "
                 Operator.ContainedIn -> " in "
                 Operator.Like -> " like "
-                else -> error("Invalid operator")
+                else -> error("unsupported operator (yet) - ${piece.operator}")
             }
             return "$it $oper $rhs"
         }
