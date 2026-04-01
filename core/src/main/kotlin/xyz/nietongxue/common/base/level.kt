@@ -6,5 +6,5 @@ enum class Level{
 
 
 enum class LogLevel {
-    TRACE,INFO, WARN, ERROR
+    TRACE,DEBUG,INFO, WARN, ERROR
 }
