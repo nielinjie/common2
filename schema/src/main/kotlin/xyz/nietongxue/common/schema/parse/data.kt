@@ -32,8 +32,7 @@ fun parseData(json: JsonNode, format: Format): DataSchema {
 }
 
 
-@Deprecated("内部使用，外部请使用 parseDataSchema ")
-fun parseData(json: String, format: Format? = null): DataSchema {
+internal fun parseData(json: String, format: Format? = null): DataSchema {
     return if (format == null) autoParse(json).let {
         parseData(it.first, it.second)
     } else {

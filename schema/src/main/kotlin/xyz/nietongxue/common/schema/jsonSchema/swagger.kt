@@ -7,7 +7,6 @@ import io.swagger.v3.oas.models.media.Schema
 import io.swagger.v3.oas.annotations.media.Schema as AS
 
 
-
 /*
 ## type 关键字支持的类型：
 

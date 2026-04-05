@@ -1,6 +1,5 @@
 package xyz.nietongxue.common.schema
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo
 import xyz.nietongxue.common.json.JsonWithType
 import xyz.nietongxue.common.json.autoParse.Format
 
@@ -18,7 +17,7 @@ interface DataSchema
 data class BooleanSchema(val value: Boolean) : DataSchema
 
 
-data class PrimitiveSchema(val constraints: List<Constraint>) : DataSchema {
+data class PrimitiveSchema(val constraints: List<Constraint>, val description: String? = null) : DataSchema {
     fun typeName(): String {
         return constraints.filterIsInstance<NamedType>().first().name
     }
@@ -43,12 +42,66 @@ data class PrimitiveSchema(val constraints: List<Constraint>) : DataSchema {
 @JsonWithType
 interface Constraint
 
+typealias Constraints = List<Constraint>
+
+fun Constraints.isRequired(): Boolean {
+    return this.contains(Required)
+}
+
+fun DataSchema.thisConstraints(): Constraints {
+    return when (this) {
+        is PrimitiveSchema -> this.constraints
+        is ObjectSchema -> this.objectConstraint
+        is ArraySchema -> this.arrayConstraints
+        else -> error("not support this type")
+    }
+}
+
 data class NamedType(val name: String) : Constraint
 data object Required : Constraint
 data object NotEmpty : Constraint
 data class LengthRange(val min: Int?, val max: Int?) : Constraint {
     init {
         require(min != null || max != null)
+    }
+}
+
+
+object Schemas {
+    fun string(): PrimitiveSchema {
+        return PrimitiveSchema(listOf(NamedType(CommonNamedTypes.STRING.name)))
+    }
+
+    fun number(): PrimitiveSchema {
+        return PrimitiveSchema(listOf(NamedType(CommonNamedTypes.NUMBER.name)))
+    }
+
+    fun boolean(): PrimitiveSchema {
+        return PrimitiveSchema(listOf(NamedType(CommonNamedTypes.BOOLEAN.name)))
+    }
+
+    fun int(): PrimitiveSchema {
+        return PrimitiveSchema(listOf(NamedType(CommonNamedTypes.INT.name)))
+    }
+
+}
+
+
+fun DataSchema.required(): DataSchema {
+    return when (this) {
+        is PrimitiveSchema -> this.copy(constraints = this.constraints + Required)
+        is ObjectSchema -> this.copy(objectConstraint = this.objectConstraint + Required)
+        is ArraySchema -> this.copy(arrayConstraints = this.arrayConstraints + Required)
+        else -> this
+    }
+}
+
+fun DataSchema.desc(description: String): DataSchema {
+    return when (this) {
+        is PrimitiveSchema -> this.copy(description = description)
+        is ObjectSchema -> this.copy(description = description)
+        is ArraySchema -> this.copy(description = description)
+        else -> this
     }
 }
 
@@ -97,22 +150,22 @@ object RequiredRecognizer : ConstraintRecognizer {
 }
 
 
-data class ArraySchema(val itemSchema: DataSchema, val arrayConstraints: List<Constraint> = listOf()) : DataSchema
-data class ObjectSchema(val properties: Map<String, DataSchema>) : DataSchema {
-    fun additional(): AdditionalProperties {
-        return this.properties["_"]?.let {
-            AdditionalProperties(it)
-        } ?: AdditionalProperties(BooleanSchema(true))
-    }
-}
+data class ArraySchema(
+    val itemSchema: DataSchema,
+    val arrayConstraints: List<Constraint> = listOf(),
+    val description: String? = null
+) : DataSchema
+
+data class ObjectSchema(
+    val properties: Map<String, DataSchema>,
+    val objectConstraint: List<Constraint> = listOf(),
+    val description: String? = null,
+    val additionalProperties: AdditionalProperties? = null //TODO 如何表现： additional properties is allowed and can be any.
+) : DataSchema
 
 data class AdditionalProperties(val schema: DataSchema)
 
 
 fun PrimitiveSchema.maxLength(): Int? {
     return this.constraints.filterIsInstance<LengthRange>().firstOrNull()?.max
-}
-
-fun PrimitiveSchema.required(): Boolean {
-    return this.constraints.contains(Required)
 }
