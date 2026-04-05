@@ -1,20 +1,17 @@
 package xyz.nietongxue.common.query
 
-
-interface StrictFields<T :Any> {
-    fun getFieldNames(): List<String>
-    fun getFieldType(fieldName: String): String
-    fun get(obj: T, fieldName: String): Any?
+interface Fields {
+    fun get(obj: Any, fieldName: String): Any?
 }
 
-class  StrictFiltering<T :Any>(val filter: Filter, val fieldsType: StrictFields<T>) {
-    fun filter(objs: List<T>): List<T> {
+open class Filtering(val filter: Filter, val fields: Fields) {
+    open fun filter(objs: List<Any>): List<Any> {
         return objs.filter {
             this.match(it)
         }
     }
 
-    fun match(obj: T): Boolean {
+    fun match(obj: Any): Boolean {
         if (filter.isEmpty()) return true
         val booleans = filter.map {
             match(obj, it)
@@ -28,9 +25,8 @@ class  StrictFiltering<T :Any>(val filter: Filter, val fieldsType: StrictFields<
         }
     }
 
-    fun match(obj: T, filterPiece: FilterPiece): Boolean {
-        val fieldValue = fieldsType.get(obj, filterPiece.fieldName)
-        val fieldType = fieldsType.getFieldType(filterPiece.fieldName)
+    fun match(obj: Any, filterPiece: FilterPiece): Boolean {
+        val fieldValue = fields.get(obj, filterPiece.fieldName)
         return when (filterPiece.operator) {
             Operator.Equal -> fieldValue == filterPiece.value
             Operator.NotEqual -> fieldValue != filterPiece.value
