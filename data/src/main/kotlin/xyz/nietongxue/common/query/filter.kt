@@ -33,7 +33,7 @@ data class FilterPiece(
     val valueType: String = CommonNamedTypes.STRING.name, //TODO common type names
     val fieldType: String? = null,
     val pieceType: PieceType,
-    val entityName: String? = null
+//    val entityName: String? = null
 ) {
     init {
         //TODO 增加一些验证，比如 operator、fieldType、valueType、value的适配性。

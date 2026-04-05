@@ -86,26 +86,14 @@ fun natureJsonToFilter(json: ArrayNode, dataStructureHint: DataStructureHint = D
         return withFieldName(json).map {
             val (fieldName, operation) = it
             val (operator, valueAndType) = operation
-            val trySplit = fieldName.split(".", limit = 2) //是否有 entity 名字。
-            if (trySplit.size == 2)
-                FilterPiece(
-                    pieceType = pieceType,
-                    fieldName = trySplit[1],
-                    operator = operator,
-                    value = valueAndType.first,
-                    valueType = valueAndType.second,
-                    fieldType = dataStructureHint.getType(fieldName), //hit里面可以带 entityName。
-                    entityName = trySplit[0]
-                )
-            else
-                FilterPiece(
-                    pieceType = pieceType,
-                    fieldName = fieldName,
-                    operator = operator,
-                    value = valueAndType.first,
-                    fieldType = dataStructureHint.getType(fieldName),
-                    valueType = valueAndType.second
-                )
+            FilterPiece(
+                pieceType = pieceType,
+                fieldName = fieldName,
+                operator = operator,
+                value = valueAndType.first,
+                fieldType = dataStructureHint.getType(fieldName),
+                valueType = valueAndType.second
+            )
         }
     }
     return json.flatMap {
