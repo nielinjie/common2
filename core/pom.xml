@@ -20,7 +20,6 @@
             <artifactId>kotlinx-datetime-jvm</artifactId>
             <version>0.4.1</version>
         </dependency>
-        <!--        implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.1")-->
 
         <dependency>
             <groupId>app.softwork</groupId>
@@ -42,14 +41,14 @@
             <version>0.10.1</version>
         </dependency>
 
-<!--        implementation("io.arrow-kt:arrow-core:1.2.0")-->
+        <!--        implementation("io.arrow-kt:arrow-core:1.2.0")-->
         <dependency>
             <groupId>io.arrow-kt</groupId>
             <artifactId>arrow-core-jvm</artifactId>
             <version>2.2.1</version>
         </dependency>
 
-<!--        implementation("io.github.encryptorcode:pluralize:1.0.0")-->
+        <!--        implementation("io.github.encryptorcode:pluralize:1.0.0")-->
 
         <dependency>
             <groupId>io.github.encryptorcode</groupId>
