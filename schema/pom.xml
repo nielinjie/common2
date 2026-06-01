@@ -48,6 +48,7 @@
             <groupId>xyz.nietongxue</groupId>
             <artifactId>common2.testing</artifactId>
             <version>${revision}</version>
+            <scope>test</scope>
         </dependency>
 
 
