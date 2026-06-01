@@ -1,9 +1,9 @@
 package xyz.nietongxue.common.response
 
 
-interface ResponseChain<R, T> {
-    val works: List<ResponseChainWorker<R, T>>
-    fun handle(request: R): ResponseChainResult<T> {
+interface ResponseChain<RQ, RE> {
+    val works: List<ResponseChainWorker<RQ, RE>>
+    fun handle(request: RQ): ResponseChainResult<RE> {
         for (worker in works) {
             when (val re = worker.handle(request)) {
                 is ResponseChainResult.Done -> return re
@@ -14,7 +14,7 @@ interface ResponseChain<R, T> {
         return ResponseChainResult.Error(Exception("no worker handle this request"))
     }
 
-    fun result(request: R): T {
+    fun result(request: RQ): RE {
         return handle(request).let {
             when (it) {
                 is ResponseChainResult.Done -> it.result
@@ -23,7 +23,7 @@ interface ResponseChain<R, T> {
             }
         }
     }
-    fun resultOrNull(request: R): T? {
+    fun resultOrNull(request: RQ): RE? {
         return handle(request).let {
             when (it) {
                 is ResponseChainResult.Done -> it.result
@@ -34,8 +34,8 @@ interface ResponseChain<R, T> {
     }
 }
 
-interface ResponseChainWorker<R, T> {
-    fun handle(request: R): ResponseChainResult<T>
+interface ResponseChainWorker<RQ, RE> {
+    fun handle(request: RQ): ResponseChainResult<RE>
 }
 
 interface ResponseChainResult<out T> {
