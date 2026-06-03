@@ -29,6 +29,7 @@
         <module>data</module>
         <module>sql</module>
         <module>scripts</module>
+        <module>fx</module>
     </modules>
 
     <properties>
