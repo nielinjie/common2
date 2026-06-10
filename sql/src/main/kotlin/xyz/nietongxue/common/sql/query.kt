@@ -57,7 +57,7 @@ object QueryToSql {
         return condition
     }
 
-    fun toSql(query: Query): QuerySqlStatements {
+    fun toSql(query: Query, dialects: Dialects = Dialects.MySql): QuerySqlStatements {
         fun where(filter: Filter): String = " where " + filterToCondition(filter)
         fun order(sort: Sort): String = " order by " + sort.joinToString(", ") {
             it.fieldName + " " + when (it.direction) {
@@ -66,7 +66,10 @@ object QueryToSql {
             }
         }
 
-        fun page(paging: Paging): String = " limit " + paging.pageSize + " offset " + paging.pageIndex * paging.pageSize
+        fun page(paging: Paging): String = when (dialects) {
+            Dialects.MySql, Dialects.Postgres, Dialects.Doris -> " limit " + paging.pageSize + " offset " + paging.pageIndex * paging.pageSize
+            Dialects.Oracle -> "OFFSET ${paging.pageIndex * paging.pageSize} ROWS FETCH NEXT ${paging.pageSize} ROWS ONLY"
+        }
         return QuerySqlStatements(
             query.filter?.let { if (it.isEmpty()) "" else where(it) } ?: "",
             query.sort?.let(::order) ?: "",
