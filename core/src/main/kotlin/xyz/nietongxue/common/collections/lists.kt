@@ -4,10 +4,14 @@ fun <T> List<T>.replaceAt(index: Int, element: T): List<T> {
     return this.replaceAt(index, listOf(element))
 }
 
-fun <T> List<T>.replaceAt(index: Int, element: List<T>): List<T> {
+fun <T> List<T>.replaceAt(index: Int, elements: List<T>): List<T> {
     val before = this.subList(0, index)
     val after = this.subList(index + 1, this.size)
-    return before + element + after
+    return before + elements + after
+}
+
+fun <T> List<T>.removeAt(index: Int): List<T> {
+    return this.replaceAt(index, emptyList())
 }
 
 fun <T> List<T>.replaceWhen(element: T, condition: (T) -> Boolean): List<T> {

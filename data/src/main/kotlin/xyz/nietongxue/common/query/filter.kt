@@ -1,5 +1,6 @@
 package xyz.nietongxue.common.query
 
+import xyz.nietongxue.common.base.Stuff
 import xyz.nietongxue.common.json.JsonWithType
 import xyz.nietongxue.common.schema.CommonNamedTypes
 
@@ -122,6 +123,17 @@ fun Filter.toNatureString(): String {
     }
 }
 
+
+fun Stuff.asFilter(): Filter {
+    return this.map {
+        FilterPiece(
+            fieldName = it.key,
+            operator = Operator.Equal,
+            value = it.value,
+            pieceType = PieceType.And
+        )
+    }
+}
 
 
 
