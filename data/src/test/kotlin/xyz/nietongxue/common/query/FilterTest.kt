@@ -25,12 +25,17 @@ class FilterTest {
                 pieceType = PieceType.And
             )
         )
-        val string = filter.toJsonStringForAny().also {
+//        val string = filter.toJsonStringForAny().also {
+//            println(it)
+//        }
+//        val nature = filter.toNatureString().also {
+//            println(it)
+//        }
+        val natureJson  = filter.toNatureJson().also {
             println(it)
         }
-        val nature = filter.toNatureString().also {
-            println(it)
-        }
+        val query = natureJsonToFilter(natureJson as ArrayNode)
+        pretty(query)
     }
 
     @Test

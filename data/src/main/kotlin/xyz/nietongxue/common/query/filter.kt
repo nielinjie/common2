@@ -1,7 +1,12 @@
 package xyz.nietongxue.common.query
 
+import com.fasterxml.jackson.databind.JsonNode
 import xyz.nietongxue.common.base.Stuff
+import xyz.nietongxue.common.collections.toJsonString
 import xyz.nietongxue.common.json.JsonWithType
+import xyz.nietongxue.common.json.defaultOM
+import xyz.nietongxue.common.json.ja
+import xyz.nietongxue.common.json.jo
 import xyz.nietongxue.common.schema.CommonNamedTypes
 
 
@@ -96,6 +101,24 @@ fun Operator.toNatureString(): String {
     }
 }
 
+
+fun Operator.toShortString(): String {
+    return when (this) {
+        Operator.Equal -> "eq"
+        Operator.NotEqual -> "ne"
+        Operator.GreaterThan -> "gt"
+        Operator.LessThan -> "lt"
+        Operator.GreaterThanOrEqual -> "ge"
+        Operator.LessThanOrEqual -> "lt"
+        Operator.ContainedIn -> "in"
+        Operator.Like -> "like"
+        Operator.Between -> "between"
+        Operator.IsNull -> "isNull"
+        Operator.IsNotNull -> "isNotNull"
+        else -> error("unknown operator")
+    }
+}
+
 @JsonWithType
 interface PieceType {
     data object And : PieceType
@@ -116,11 +139,33 @@ fun PieceType.joiningString(): String = when (this) {
     else -> error("not support piece type")
 }
 
+/**
+ * 返回一个人类易读的字符串
+ * 注意：不是一个可以用来解析的自然 json
+ */
 fun Filter.toNatureString(): String {
     val start = this.first().pieceType.prefix()
     return "$start " + this.joinToString(" ") {
         it.pieceType.joiningString() + " " + it.fieldName + " " + it.operator.toNatureString() + " " + it.value
     }
+}
+
+/**
+ * 返回一个可以用来解析的自然 json
+ */
+fun Filter.toNatureJson(): JsonNode {
+    return ja(
+        *this@toNatureJson.map {
+            jo(
+                it.pieceType.joiningString() to jo(
+                    it.fieldName to jo(
+                        it.operator.toShortString() to defaultOM.valueToTree(it.value)
+                    )
+                )
+            )
+        }.toTypedArray()
+    )
+
 }
 
 
