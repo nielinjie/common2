@@ -7,6 +7,7 @@ class StringTest {
     fun subs(){
         val s = "1234567890"
         s.subStringList().also {
+            println(it)
             assert(it.size==10)
             assert(it[0]=="1")
         }
@@ -18,6 +19,14 @@ class StringTest {
         s3.subStringList().also {
             assert(it.size==1)
             assert(it[0]=="1")
+        }
+    }
+    @Test
+    fun subs2(){
+        val s = "1234567890"
+        s.subStringStream().also {
+            for (s in it)
+                println(s)
         }
     }
 }
