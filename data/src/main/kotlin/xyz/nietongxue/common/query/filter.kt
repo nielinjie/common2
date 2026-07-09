@@ -180,6 +180,14 @@ fun Stuff.asFilter(): Filter {
     }
 }
 
+fun Filter.and(other: Filter): Filter {
+    require(this.all { it.pieceType == PieceType.And } && other.all { it.pieceType == PieceType.And }) {
+        "相当于 and 后面加括号里面可能有 or，解开括号是否是等于 and and and and"
+    }
+    return this + other.map {
+        it.copy(pieceType = PieceType.And)
+    }
+}
 
 
 
