@@ -37,7 +37,6 @@ fun parseOperation(json: String, format: Format? = null): Operation {
 }
 
 fun jsonToParameter(json: ObjectNode, format: Format): Parameter {
-    val om = jacksonObjectMapper()
 
     val schema = json.get("schema")?.let {
         parseData(it, format)

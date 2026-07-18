@@ -12,6 +12,7 @@ interface NameScopeStrategy {
     data object Hash : NameScopeStrategy // 直接使用 hash
     data object ShortestDistinct : NameScopeStrategy // 尝试截取一段最短的
     data object HashShortestDistinct : NameScopeStrategy // 先hash，再尝试截取最短
+    data class Counter(val prefix: String = "", val start: Int = 0) : NameScopeStrategy
 }
 
 typealias Naming = Pair<Name, Name>
@@ -37,10 +38,21 @@ data class InnerNameScope(val names: List<Name>, val strategy: NameScopeStrategy
         }
 
         is NameScopeStrategy.HashShortestDistinct -> {
-            shorted(names.map { it.md5() to it })
+            shorted(names.map { it.v3() to it })
         }
 
-        else -> TODO()
+        is NameScopeStrategy.Counter -> {
+            val re = mutableListOf<Naming>()
+            var counter = strategy.start
+            names.forEach {
+                re.add(it to (strategy.prefix + counter.toString()))
+                counter++
+            }
+            re
+        }
+
+
+        else -> error("not implemented")
     }
 
 

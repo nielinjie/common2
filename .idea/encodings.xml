@@ -23,6 +23,8 @@
     <file url="file://$PROJECT_DIR$/json/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/persistence/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/persistence/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pinyin/src/main/kotlin" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/pinyin/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/processing/src/main/kotlin" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/processing/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/schema/src/main/kotlin" charset="UTF-8" />

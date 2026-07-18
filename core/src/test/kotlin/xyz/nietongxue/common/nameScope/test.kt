@@ -66,4 +66,16 @@ class NameTest {
         println(nameScope.nameScope.namings)
 
     }
+    @Test
+    fun useCounter() {
+        val nameScope = NameScope(NameScopeStrategy.Counter("name_",1))
+
+        for (i in 0..10) {
+            println(nameScope.getARandomName())
+
+        }
+        println(nameScope.nameScope.namings)
+
+    }
+
 }

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.models.parameters.RequestBody
 import io.swagger.v3.oas.models.responses.ApiResponse
 import io.swagger.v3.oas.models.responses.ApiResponses
 import xyz.nietongxue.common.schema.Operation
+import xyz.nietongxue.common.schema.jsonSchema.toSwagger
 import io.swagger.v3.oas.models.Operation as SO
 import io.swagger.v3.oas.models.parameters.Parameter as SP
 
@@ -14,7 +15,7 @@ fun Operation.toOpenApi(): SO {
     val paras: List<SP> = this.parameters.map {
         SP().apply {
             name = it.name
-            schema = it.schema.toOpenApi()
+            schema = it.schema.toSwagger()
             required = it.required
             `in` = it.`in`
             style = when (it.style) {
@@ -31,7 +32,7 @@ fun Operation.toOpenApi(): SO {
         RequestBody().apply {
             content = Content().apply {
                 val mediaType = MediaType().apply {
-                    schema = it.toOpenApi()
+                    schema = it.toSwagger()
                 }
                 this["application/json"] = mediaType
             }
@@ -44,7 +45,7 @@ fun Operation.toOpenApi(): SO {
                     description = "OK"
                     content = Content().apply {
                         val mediaType = MediaType().apply {
-                            schema = it.toOpenApi()
+                            schema = it.toSwagger()
                         }
                         this["application/json"] = mediaType
                     }

@@ -30,6 +30,7 @@
         <module>sql</module>
         <module>scripts</module>
         <module>fx</module>
+        <module>pinyin</module>
     </modules>
 
     <properties>

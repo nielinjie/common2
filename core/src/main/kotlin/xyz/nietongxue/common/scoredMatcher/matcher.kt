@@ -34,10 +34,14 @@ fun <T> MatchResult<T>?.add(b: MatchResult<T>?): MatchResult<T>? {
         b?.let { b ->
             require(a.value == b.value)
             if (a.score.value > 0 && b.score.value > 0) {
-                MatchResult(a.value, Score(max(a.score.value, b.score.value)), a.reason + b.reason)
+                MatchResult(a.value, Score(max(a.score.value, b.score.value)), "${a.reason} + ${b.reason}")
             } else null
         }
     }
+}
+
+fun <T, R> MatchResult<T>.andThen(b: MatchResult<R>): MatchResult<R> {
+    return MatchResult(b.value, Score(score.value * b.score.value), "$reason -> ${b.reason}")
 }
 
 data class MatchResult<R>(val value: R, val score: Score, val reason: String, val additional: Any? = null) {

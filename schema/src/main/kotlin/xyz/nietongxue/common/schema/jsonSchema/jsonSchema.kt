@@ -42,7 +42,7 @@ fun DataSchema.toSwagger(): Schema<out Any> {
                 this.addType("boolean")
             }
 
-            else -> error("not support")
+            else -> error("not support - ${this.typeName()}")
         }.let {
             //TODO primitive constraints
             it.also {
