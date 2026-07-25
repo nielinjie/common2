@@ -164,3 +164,9 @@ fun String.cList(delimiters: Regex = Regex("[、，,/#\\s]+")): List<String> {
     val results = this.split(delimiters).map { it.trim() }
     return results.filter { it.isNotEmpty() }
 }
+
+fun <T> String?.ifNotEmpty(block: (String) -> T?): T? {
+    return if (!this.isNullOrEmpty()) {
+        block(this)
+    } else null
+}
