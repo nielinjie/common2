@@ -2,7 +2,7 @@ package xyz.nietongxue.common.fake
 
 import xyz.nietongxue.common.schema.ObjectSchema
 import xyz.nietongxue.common.schema.Schemas
-import xyz.nietongxue.common.schema.withLengthRange
+import xyz.nietongxue.common.schema.lengthRange
 import kotlin.test.Test
 
 class FakeTest {
@@ -15,7 +15,7 @@ class FakeTest {
                 "birthday" to Schemas.date(),
                 "address" to Schemas.objectSchema(
                     properties = mapOf(
-                        "city" to Schemas.string().withLengthRange(3,5),
+                        "city" to Schemas.string().lengthRange(3,5),
                         "street" to Schemas.string()
                     )
                 )

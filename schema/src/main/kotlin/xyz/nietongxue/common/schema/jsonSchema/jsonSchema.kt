@@ -41,6 +41,16 @@ fun DataSchema.toSwagger(): Schema<out Any> {
             "boolean" -> Schema<Boolean>().apply {
                 this.addType("boolean")
             }
+            "uuid" -> Schema<String>().apply {
+                this.addType("string")
+                this.format = "uuid"
+            }
+            "int" -> Schema<Int>().apply {
+                this.addType("integer")
+            }
+            "integer" -> Schema<Int>().apply {
+                this.addType("integer")
+            }
 
             else -> error("not support - ${this.typeName()}")
         }.let {

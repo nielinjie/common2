@@ -48,6 +48,8 @@ fun Constraints.isRequired(): Boolean {
     return this.contains(Required)
 }
 
+
+
 fun DataSchema.thisConstraints(): Constraints {
     return when (this) {
         is PrimitiveSchema -> this.constraints
@@ -84,6 +86,22 @@ object Schemas {
         return PrimitiveSchema(listOf(NamedType(CommonNamedTypes.INT.name)))
     }
 
+    fun objectSchema(properties: Map<String, DataSchema>): ObjectSchema {
+        return ObjectSchema(properties)
+    }
+
+    fun date(): PrimitiveSchema {
+        return PrimitiveSchema(listOf(NamedType(CommonNamedTypes.DATE.name)))
+    }
+
+    fun `object`(properties: Map<String, DataSchema>): ObjectSchema {
+        return ObjectSchema(properties)
+    }
+
+    fun array(itemSchema: DataSchema): ArraySchema {
+        return ArraySchema(itemSchema)
+    }
+
 }
 
 
@@ -96,11 +114,20 @@ fun DataSchema.required(): DataSchema {
     }
 }
 
-fun DataSchema.desc(description: String): DataSchema {
+fun DataSchema.description(description: String): DataSchema {
     return when (this) {
         is PrimitiveSchema -> this.copy(description = description)
         is ObjectSchema -> this.copy(description = description)
         is ArraySchema -> this.copy(description = description)
+        else -> this
+    }
+}
+
+fun DataSchema.lengthRange(min: Int?, max: Int?): DataSchema {
+    return when (this) {
+        is PrimitiveSchema -> this.copy(constraints = this.constraints + LengthRange(min, max))
+        is ObjectSchema -> this.copy(objectConstraint = this.objectConstraint + LengthRange(min, max))
+        is ArraySchema -> this.copy(arrayConstraints = this.arrayConstraints + LengthRange(min, max))
         else -> this
     }
 }
@@ -166,6 +193,9 @@ data class ObjectSchema(
 data class AdditionalProperties(val schema: DataSchema)
 
 
-fun PrimitiveSchema.maxLength(): Int? {
-    return this.constraints.filterIsInstance<LengthRange>().firstOrNull()?.max
+fun Constraints.lengthRange(): LengthRange? {
+    return this.filterIsInstance<LengthRange>().firstOrNull()
+}
+fun Constraints.range(): Range? {
+    return this.filterIsInstance<Range>().firstOrNull()
 }
