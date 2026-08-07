@@ -24,3 +24,5 @@ fun formatToCustomStyle(dateString: String, outputPattern: String = "yyyy-MM-dd 
     val localDateTime = parseHttpDate(dateString)
     return localDateTime?.format(DateTimeFormatter.ofPattern(outputPattern))
 }
+
+

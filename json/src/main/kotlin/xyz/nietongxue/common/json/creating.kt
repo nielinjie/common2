@@ -13,9 +13,11 @@ import xyz.nietongxue.common.json.defaultOM
 fun String.asJson(): JsonNode {
     return TextNode(this)
 }
+
 fun Int.asJson(): JsonNode {
     return IntNode(this)
 }
+
 fun Long.asJson(): JsonNode {
     return LongNode(this)
 }
@@ -32,6 +34,10 @@ fun jo(vararg pairs: Pair<String, JsonNode>): ObjectNode {
             put(it.first, it.second)
         }
     }
+}
+
+fun jo(pairs: Map<String, JsonNode>): ObjectNode {
+    return jo(*pairs.toList().toTypedArray())
 }
 
 fun ja(vararg nodes: JsonNode): ArrayNode {

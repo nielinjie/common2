@@ -14,7 +14,7 @@ fun v3(name: String): String {
     return name.v3()
 }
 
-fun toGraphImp(uml: Uml, graph: Graph): Graph {
+private fun toGraphImp(uml: Uml, graph: Graph): Graph {
     return when (uml) {
         is Uml.Root -> {
             uml.units.fold(graph) { g, u ->

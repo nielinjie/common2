@@ -18,7 +18,5 @@ fun fromString(duration: String): Duration {
 
 
 fun Duration.toK(): kotlin.time.Duration {
-    return this.toMillis().let {
-        it.milliseconds
-    }
+    return this.toMillis().milliseconds
 }

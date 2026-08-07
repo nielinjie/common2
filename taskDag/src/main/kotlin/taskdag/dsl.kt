@@ -197,25 +197,32 @@ class TaskBuilder<E : Any>(val _name: String?) {
         if (name == null) {
             throw IllegalArgumentException("name should not be null")
         }
-        if (dag != null && action != null) {
-            error("should not have dag and action at the same time")
-        } else if (dag == null && action == null) {
-            if (outEvent != null) {
-                this.action = { context ->
-                    outEvent!! to context
+        when {
+            dag != null && action != null -> {
+                error("should not have dag and action at the same time")
+            }
+
+            dag == null && action == null -> {
+                if (outEvent != null) {
+                    this.action = { context ->
+                        outEvent!! to context
+                    }
+                } else {
+                    throw IllegalArgumentException("should have action or dag")
                 }
-            } else {
-                throw IllegalArgumentException("should have action or dag")
             }
-        } else if (dag != null && action == null) {
-            //TODO 改成 region 的方式？以便统一 fork、join 的实现
-            this.action = { context ->
-                val runtime = TasksRuntime(dag!!.first!!)
-                runtime.start(dag!!.first.startEvent().getOrThrow())
-                runtime.waitForEnd()
-                dag!!.second to context
+
+            dag != null && action == null -> {
+                //TODO 改成 region 的方式？以便统一 fork、join 的实现
+                //这里是采用的嵌套 runtime 的方式。
+                this.action = { context ->
+                    val runtime = TasksRuntime(dag!!.first!!)
+                    runtime.start(dag!!.first.startEvent().getOrThrow())
+                    runtime.waitForEnd()
+                    dag!!.second to context
+                }
+                meta["dag"] = dag!!
             }
-            meta["dag"] = dag!!
         }
         return object : RichTask<E>(this@TaskBuilder.meta) {
             override val name: String = this@TaskBuilder.name!!
