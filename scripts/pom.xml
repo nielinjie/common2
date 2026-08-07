@@ -30,6 +30,11 @@
             <version>4.0.7</version>
         </dependency>
         <dependency>
+            <groupId>com.dashjoin</groupId>
+            <artifactId>jsonata</artifactId>
+            <version>0.9.10</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.groovy</groupId>
             <artifactId>groovy</artifactId>
             <version>5.0.3</version>
