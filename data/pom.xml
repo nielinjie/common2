@@ -29,6 +29,11 @@
             <version>${revision}</version>
         </dependency>
         <dependency>
+            <groupId>net.datafaker</groupId>
+            <artifactId>datafaker</artifactId>
+            <version>2.7.0</version>
+        </dependency>
+        <dependency>
             <groupId>xyz.nietongxue</groupId>
             <artifactId>common2.testing</artifactId>
             <version>${revision}</version>
