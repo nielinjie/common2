@@ -5,21 +5,23 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.jayway.jsonpath.JsonPath
 import xyz.nietongxue.common.properties.transform
+import xyz.nietongxue.common.softdata.path.Path
+import xyz.nietongxue.common.softdata.path.PathNode
 import xyz.nietongxue.common.string.wrapBy
 import xyz.nietongxue.common.json.transform as ot
 
 class Transforming(
-    val path: TransformPath,
+    val path: Path,
     val propertyFn: (BuildingProperty) -> BuildingProperty,
     val valueFn: (Any?) -> Any?
 )
 
-fun TransformPath.toJsonPath(): JsonPath {
+fun Path.toJsonPath(): JsonPath {
     return (listOf("$") + this.path.map {
         when (it) {
-            is TransformPathNode.NamePathNode -> it.name.wrapBy("'").wrapBy("[")
-            is TransformPathNode.IndexPathNode -> it.index.toString().wrapBy("[")
-            is TransformPathNode.ItemPathNode -> "*".wrapBy("[")
+            is PathNode.NameNode -> it.name.wrapBy("'").wrapBy("[")
+            is PathNode.IndexNode -> it.index.toString().wrapBy("[")
+            is PathNode.AllItemNode -> "*".wrapBy("[")
         }
     }).joinToString(".").let {
         JsonPath.compile(it)
@@ -44,6 +46,12 @@ fun Any?.transform(transforming: Transforming): Any? {
     ).let { om.treeToValue(it, Any::class.java) }
 }
 
+/**
+ * TODO 似乎没有明确的意义。
+ * value 的 transform 是明确的，但 type（property）的 transform作用是什么？用来验证 transform 以后的结果？
+ *
+ */
+@Deprecated("意义不太明确")
 fun DataStructure.transform(transforming: Transforming): DataStructure {
 
     return DataStructure(

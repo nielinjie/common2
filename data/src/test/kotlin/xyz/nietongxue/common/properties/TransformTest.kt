@@ -1,15 +1,12 @@
 package xyz.nietongxue.common.properties
 
-import com.jayway.jsonpath.JsonPath
-import org.assertj.core.api.Assertions.assertThat
 import xyz.nietongxue.common.json.JPathConfig
 import xyz.nietongxue.common.softdata.DataStructure
-import xyz.nietongxue.common.softdata.TransformPath
+import xyz.nietongxue.common.softdata.path.Path
 import xyz.nietongxue.common.softdata.Transforming
 import xyz.nietongxue.common.softdata.building
-import xyz.nietongxue.common.softdata.paths
+import xyz.nietongxue.common.softdata.path.paths
 import xyz.nietongxue.common.softdata.transform
-import xyz.nietongxue.common.testing.pretty
 import kotlin.test.Test
 
 class TransformTest {
@@ -24,7 +21,7 @@ class TransformTest {
             )
         )
         val new = property.transform(
-            TransformPath.parse("$.users.[]"), { oldProperty ->
+            Path.parse("$.users.[]"), { oldProperty ->
                 SimpleProperty("string").building()
             }
         )
@@ -51,7 +48,7 @@ class TransformTest {
                 )
             )
         }
-        val transforming = Transforming(TransformPath.parse("$.users.[]"), { oldProperty ->
+        val transforming = Transforming(Path.parse("$.users.[]"), { oldProperty ->
             SimpleProperty("string").building()
         }, {
             (it as Map<String, String>)["userName"]
@@ -78,7 +75,7 @@ class TransformTest {
                 )
             )
         }
-        val transforming = Transforming(TransformPath.parse("$.users"), { oldProperty ->
+        val transforming = Transforming(Path.parse("$.users"), { oldProperty ->
             SimpleProperty("string").building()
         }, {
             ((it as List<Map<String, String>>).get(0))["userName"]
@@ -106,7 +103,7 @@ class TransformTest {
                 )
             )
         }
-        val transforming = Transforming(TransformPath.parse("$.users.[].userName"), { oldProperty ->
+        val transforming = Transforming(Path.parse("$.users.[].userName"), { oldProperty ->
             ObjectProperty(
                 mapOf(
                     "first" to SimpleProperty("string"), "last" to SimpleProperty("string")

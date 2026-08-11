@@ -1,8 +1,8 @@
 package xyz.nietongxue.common.properties
 
 import org.assertj.core.api.Assertions.assertThat
-import xyz.nietongxue.common.softdata.TransformPathNode
-import xyz.nietongxue.common.softdata.paths
+import xyz.nietongxue.common.softdata.path.PathNode
+import xyz.nietongxue.common.softdata.path.paths
 import kotlin.test.Test
 
 
@@ -11,7 +11,7 @@ class PathsTest {
     @Test
     fun test() {
         val property = ObjectProperty(mapOf("userName" to SimpleProperty("string")))
-        val get = property.get(listOf(TransformPathNode.NamePathNode("userName")))
+        val get = property.get(listOf(PathNode.NameNode("userName")))
         println(get)
     }
 
@@ -20,13 +20,13 @@ class PathsTest {
         val property = ObjectProperty(mapOf("userName" to SimpleProperty("string")))
         val get = property.get(
             listOf(
-                TransformPathNode.NamePathNode("owner"),
-                TransformPathNode.NamePathNode("userName")
+                PathNode.NameNode("owner"),
+                PathNode.NameNode("userName")
             )
         )
         println(get)
         val get2 = property.get(
-            listOf(TransformPathNode.NamePathNode("owner"))
+            listOf(PathNode.NameNode("owner"))
         )
         println(get2)
     }
@@ -43,9 +43,9 @@ class PathsTest {
         )
         val get2 = property.get(
             listOf(
-                TransformPathNode.NamePathNode("users"),
-                TransformPathNode.ItemPathNode,
-                TransformPathNode.NamePathNode("userName")
+                PathNode.NameNode("users"),
+                PathNode.AllItemNode,
+                PathNode.NameNode("userName")
             )
         )
         println(get2)
@@ -76,6 +76,7 @@ class PathsTest {
             )
         )
         val paths = property.paths()
+        println(paths)
         paths.forEach {
             val gotProperty = property.get(it.path)
             assertThat(it.property).isEqualTo(gotProperty)
