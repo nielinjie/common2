@@ -30,6 +30,34 @@ open class Filtering(val filter: Filter, val fields: Fields) {
         return when (filterPiece.operator) {
             Operator.Equal -> fieldValue == filterPiece.value
             Operator.NotEqual -> fieldValue != filterPiece.value
+            Operator.GreaterThan -> when (fieldValue) {
+                is Number -> fieldValue.toDouble() > ((filterPiece.value as? Number)?.toDouble()
+                    ?: error("not comparable"))
+
+                else -> error("not comparable")
+            }
+
+            Operator.LessThan -> when (fieldValue) {
+                is Number -> fieldValue.toDouble() < ((filterPiece.value as? Number)?.toDouble()
+                    ?: error("not comparable"))
+
+                else -> error("not comparable")
+            }
+
+            Operator.GreaterThanOrEqual -> when (fieldValue) {
+                is Number -> fieldValue.toDouble() >= ((filterPiece.value as? Number)?.toDouble()
+                    ?: error("not comparable"))
+
+                else -> error("not comparable")
+            }
+
+            Operator.LessThanOrEqual -> when (fieldValue) {
+                is Number -> fieldValue.toDouble() <= ((filterPiece.value as? Number)?.toDouble()
+                    ?: error("not comparable"))
+
+                else -> error("not comparable")
+            }
+
             else -> TODO()
         }
     }
