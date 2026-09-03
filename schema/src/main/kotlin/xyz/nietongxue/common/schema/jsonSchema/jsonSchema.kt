@@ -27,7 +27,7 @@ additionalProperties :true
  */
 
 
-fun DataSchema.toSwagger(): Schema<out Any> {
+fun DataSchema.toSwagger(): Schema<*> {
     return when (this) {
         is PrimitiveSchema -> when (this.typeName()) {
             "string" -> Schema<String>().apply {
@@ -41,13 +41,16 @@ fun DataSchema.toSwagger(): Schema<out Any> {
             "boolean" -> Schema<Boolean>().apply {
                 this.addType("boolean")
             }
+
             "uuid" -> Schema<String>().apply {
                 this.addType("string")
                 this.format = "uuid"
             }
+
             "int" -> Schema<Int>().apply {
                 this.addType("integer")
             }
+
             "integer" -> Schema<Int>().apply {
                 this.addType("integer")
             }

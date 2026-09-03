@@ -94,20 +94,20 @@ fun Any.toJsonString(pretty: Boolean = false): String {
 }
 
 
-fun <T : Any> List<Pair<T, Any?>>.toNotNullMap(): Map<T, Any> {
+fun <T : Any, V : Any> List<Pair<T, V?>>.toNotNullMap(): Map<T, V> {
     return this.filter { it.second != null }.associate { it.first to it.second!! }
 }
 
-fun <T : Any> Map<T, Any>.singleOrNull(): Pair<T, Any>? {
+fun <T : Any, V : Any> Map<T, V>.singleOrNull(): Pair<T, V>? {
     return this.entries.singleOrNull()?.toPair()
 }
 
 
-fun <T : Any> Map<T, Any?>.toNotNullMap(): Map<T, Any> {
+fun <T : Any, V : Any> Map<T, V?>.toNotNullMap(): Map<T, V> {
     return this.toList().toNotNullMap()
 }
 
-fun <T : Any> Map<T, Any?>.toNoNullValueMap(): Map<T, Any> { //这个名字更准确些。
+fun <T : Any,V:Any> Map<T, V?>.toNoNullValueMap(): Map<T, V> { //这个名字更准确些。
     return this.toList().toNotNullMap()
 }
 

@@ -1,5 +1,20 @@
 package xyz.nietongxue.common.collections
 
+/**
+ * 不同于 singleOrNull。
+ */
+fun <T> List<T>.oneOrNone(): T? {
+    return when (this.size) {
+        1 -> this[0]
+        0 -> null
+        else -> throw IllegalArgumentException("List can not contain more than one element")
+    }
+}
+
+fun <T> List<T>.oneOrNone(fn: (T) -> Boolean): T? {
+    return this.filter { fn(it) }.oneOrNone()
+}
+
 fun <T> List<T>.replaceAt(index: Int, element: T): List<T> {
     return this.replaceAt(index, listOf(element))
 }
