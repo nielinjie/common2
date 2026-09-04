@@ -49,7 +49,6 @@ fun Constraints.isRequired(): Boolean {
 }
 
 
-
 fun DataSchema.thisConstraints(): Constraints {
     return when (this) {
         is PrimitiveSchema -> this.constraints
@@ -96,6 +95,13 @@ object Schemas {
 
     fun `object`(properties: Map<String, DataSchema>): ObjectSchema {
         return ObjectSchema(properties)
+    }
+
+    fun anyObject(): ObjectSchema {
+        return ObjectSchema(
+            emptyMap(),
+            additionalProperties = AdditionalProperties(Schemas.string())
+        )
     }
 
     fun array(itemSchema: DataSchema): ArraySchema {
@@ -196,6 +202,7 @@ data class AdditionalProperties(val schema: DataSchema)
 fun Constraints.lengthRange(): LengthRange? {
     return this.filterIsInstance<LengthRange>().firstOrNull()
 }
+
 fun Constraints.range(): Range? {
     return this.filterIsInstance<Range>().firstOrNull()
 }
