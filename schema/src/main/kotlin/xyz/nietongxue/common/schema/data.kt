@@ -100,7 +100,7 @@ object Schemas {
     fun anyObject(): ObjectSchema {
         return ObjectSchema(
             emptyMap(),
-            additionalProperties = AdditionalProperties(Schemas.string())
+            additionalProperties = AdditionalProperties(boolean = true)
         )
     }
 
@@ -196,7 +196,7 @@ data class ObjectSchema(
     val additionalProperties: AdditionalProperties? = null //TODO 如何表现： additional properties is allowed and can be any.
 ) : DataSchema
 
-data class AdditionalProperties(val schema: DataSchema)
+data class AdditionalProperties(val schema: DataSchema? = null, val boolean: Boolean? = null)
 
 
 fun Constraints.lengthRange(): LengthRange? {

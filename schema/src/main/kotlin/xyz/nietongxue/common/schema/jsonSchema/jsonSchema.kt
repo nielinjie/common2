@@ -62,6 +62,7 @@ fun DataSchema.toSwagger(): Schema<*> {
                 if (!this@toSwagger.thisConstraints().isRequired()) {
                     it.addType("null")
                 }
+                it.description = this@toSwagger.description
             }
         }
 
@@ -71,11 +72,19 @@ fun DataSchema.toSwagger(): Schema<*> {
                 this.addType("null")
             }
             //TODO object constraints
-            this.properties = this@toSwagger.properties.mapValues { it.value.toSwagger() }.toMutableMap()
-            this.required(this@toSwagger.properties.mapNotNull {
+            this@toSwagger.properties.mapValues { it.value.toSwagger() }.toMutableMap().also {
+                if (it.isNotEmpty()) this.properties = it
+            }
+
+            this@toSwagger.properties.mapNotNull {
                 if (it.value.thisConstraints().isRequired()) it.key else null
-            })
-            this.additionalProperties = this@toSwagger.additionalProperties?.schema?.toSwagger() ?: false
+            }.also {
+                if (it.isNotEmpty()) this.required(it)
+            }
+            this.additionalProperties =
+                (this@toSwagger.additionalProperties?.let { it.schema?.toSwagger() ?: it.boolean }) ?: false
+            this.description = this@toSwagger.description
+
         }
 
         is ArraySchema -> Schema<Any>().apply {
@@ -85,6 +94,8 @@ fun DataSchema.toSwagger(): Schema<*> {
             }
             //TODO array constraints
             this.items = this@toSwagger.itemSchema.toSwagger()
+            this.description = this@toSwagger.description
+
         }
 
         else -> error("not support")
