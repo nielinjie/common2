@@ -37,7 +37,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.code.style>official</kotlin.code.style>
         <kotlin.compiler.jvmTarget>21</kotlin.compiler.jvmTarget>
-        <revision>6.0.0-SNAPSHOT</revision> <!-- 统一版本变量 -->
+        <revision>6.0.0</revision> <!-- 统一版本变量 -->
         <flatten.plugin.version>1.7.2</flatten.plugin.version> <!-- 插件版本 -->
         <spring.framework.version>6.2.10</spring.framework.version>
         <spring.boot.version>3.5.5</spring.boot.version>
@@ -184,6 +184,11 @@
         </dependency>
     </dependencies>
     <distributionManagement>
+        <repository>
+            <id>repsy</id>
+            <name>repsy-release</name>
+            <url>https://repo.repsy.io/mvn/nielinjie/default</url>
+        </repository>
         <snapshotRepository>
             <id>repsy</id>
             <name>respy</name>
