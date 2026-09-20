@@ -13,9 +13,6 @@ annotation class Schema(
 @JsonWithType
 interface DataSchema
 
-//主要用在 json schema 里面。一般的 schema 用 primary
-data class BooleanSchema(val value: Boolean) : DataSchema
-
 
 data class PrimitiveSchema(val constraints: List<Constraint>, val description: String? = null) : DataSchema {
     fun typeName(): String {

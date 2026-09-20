@@ -1,27 +1,22 @@
 package xyz.nietongxue.common.schema.parse
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ArrayNode
-import com.fasterxml.jackson.databind.node.BooleanNode
-import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.databind.node.TextNode
-import xyz.nietongxue.common.schema.ArraySchema
-import xyz.nietongxue.common.schema.BooleanSchema
-import xyz.nietongxue.common.schema.DataSchema
-import xyz.nietongxue.common.schema.ObjectSchema
-import xyz.nietongxue.common.schema.PrimitiveSchema
+import com.fasterxml.jackson.databind.node.*
 import xyz.nietongxue.common.json.autoParse.Format
 import xyz.nietongxue.common.json.autoParse.autoParse
+import xyz.nietongxue.common.schema.*
 
 @Deprecated("内部使用，外部请使用 parseDataSchema ")
 fun parseData(json: JsonNode, format: Format): DataSchema {
     return when (json) {
-        is BooleanNode -> BooleanSchema(json.booleanValue())
+        is BooleanNode -> Schemas.boolean()
+        is IntNode -> Schemas.int()
+        is LongNode -> Schemas.int()
+        is DoubleNode -> Schemas.number()
+        is FloatNode -> Schemas.number()
         is TextNode -> json.textValue().let {
-            if (it.lowercase() == "true" || it.lowercase() == "false")
-                BooleanSchema(it.toBoolean())
-            else
-                PrimitiveSchema.Companion.fromString(it, format)
+
+            PrimitiveSchema.fromString(it, format)
         }
             ?: error("primitiveSchema parse failed - ${json.toPrettyString()}")
 

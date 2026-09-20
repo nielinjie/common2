@@ -1,5 +1,6 @@
 package xyz.nietongxue.common.collections
 
+import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
@@ -84,7 +85,7 @@ fun Any.toJsonString(pretty: Boolean = false): String {
     return if (this is List<*>)
         (this as List<Any>).toJsonStringForAny()
     else
-        jacksonObjectMapper().valueToTree<ObjectNode>(this).let {
+        jacksonObjectMapper().valueToTree<JsonNode>(this).let {
             if (pretty) {
                 it.toPrettyString()
             } else {
@@ -107,7 +108,7 @@ fun <T : Any, V : Any> Map<T, V?>.toNotNullMap(): Map<T, V> {
     return this.toList().toNotNullMap()
 }
 
-fun <T : Any,V:Any> Map<T, V?>.toNoNullValueMap(): Map<T, V> { //这个名字更准确些。
+fun <T : Any, V : Any> Map<T, V?>.toNoNullValueMap(): Map<T, V> { //这个名字更准确些。
     return this.toList().toNotNullMap()
 }
 
