@@ -1,20 +1,8 @@
 package xyz.nietongxue.common.schema.jsonSchema
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.BooleanNode
 import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.swagger.v3.oas.models.media.Schema
-import xyz.nietongxue.common.schema.ArraySchema
-import xyz.nietongxue.common.schema.BooleanSchema
-import xyz.nietongxue.common.schema.DataSchema
-import xyz.nietongxue.common.schema.ObjectSchema
-import xyz.nietongxue.common.schema.PrimitiveSchema
-import xyz.nietongxue.common.schema.Required
-import xyz.nietongxue.common.schema.isRequired
-import xyz.nietongxue.common.schema.required
-import xyz.nietongxue.common.schema.thisConstraints
-import kotlin.collections.iterator
+import xyz.nietongxue.common.schema.*
 
 
 val defaultAnnotation = $$"$schema" to "https://json-schema.org/draft/2020-12/schema"

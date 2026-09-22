@@ -1,10 +1,7 @@
 package xyz.nietongxue.common.http
 
-import org.apache.http.client.config.RequestConfig
-import org.apache.http.client.methods.HttpDelete
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
-import org.apache.http.client.methods.HttpPut
 import org.apache.http.client.methods.HttpRequestBase
 import org.apache.http.client.utils.URIBuilder
 import org.apache.http.entity.ContentType
