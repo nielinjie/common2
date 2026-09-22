@@ -25,26 +25,26 @@ enum class InputToPlace {
 
 
 data class InputMapping(
-    val otherFields: Map<InputToPlace, List<String>> = mapOf(),
+    val specialFields: Map<InputToPlace, List<String>> = mapOf(),
     val default: InputToPlace = InputToPlace.Query
 ) {
     init {
-        if (default == InputToPlace.Body && otherFields.containsKey(InputToPlace.Form))
+        if (default == InputToPlace.Body && specialFields.containsKey(InputToPlace.Form))
             throw IllegalArgumentException("InputToPlace.Body and InputToPlace.Form cannot be used at the same time")
-        if (default == InputToPlace.Form && otherFields.containsKey(InputToPlace.Body))
+        if (default == InputToPlace.Form && specialFields.containsKey(InputToPlace.Body))
             throw IllegalArgumentException("InputToPlace.Body and InputToPlace.Form cannot be used at the same time")
-        if(otherFields.containsKey(InputToPlace.Body) && otherFields.containsKey(InputToPlace.Form))
+        if (specialFields.containsKey(InputToPlace.Body) && specialFields.containsKey(InputToPlace.Form))
             throw IllegalArgumentException("InputToPlace.Body and InputToPlace.Form cannot be used at the same time")
     }
 
     fun others(place: InputToPlace, vararg fields: String): InputMapping {
         return copy(
-            otherFields = otherFields + (place to ((otherFields[place] ?: listOf()) + fields.toList()).distinct())
+            specialFields = specialFields + (place to ((specialFields[place] ?: listOf()) + fields.toList()).distinct())
         )
     }
 
     fun getByField(field: String): InputToPlace {
-        for ((place, fields) in otherFields) {
+        for ((place, fields) in specialFields) {
             if (fields.contains(field)) return place
         }
         return this.default
