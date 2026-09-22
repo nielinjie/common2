@@ -3,33 +3,35 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>xyz.nietongxue</groupId>
         <artifactId>common2</artifactId>
         <version>${revision}</version>
     </parent>
 
-    <properties>
-        <javafx.version>21.0.6</javafx.version>
-    </properties>
+    <artifactId>common2.http</artifactId>
 
-    <artifactId>common2.fx</artifactId>
+    <properties>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <http.version>4.5.13</http.version>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>xyz.nietongxue</groupId>
-            <artifactId>common2.spring</artifactId>
+            <artifactId>common2.json</artifactId>
             <version>${revision}</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>${javafx.version}</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${http.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>${javafx.version}</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>${http.version}</version>
         </dependency>
     </dependencies>
 
