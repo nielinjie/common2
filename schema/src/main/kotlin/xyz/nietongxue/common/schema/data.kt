@@ -19,8 +19,12 @@ data class PrimitiveSchema(val constraints: List<Constraint>, val description: S
         return constraints.filterIsInstance<NamedType>().first().name
     }
 
+    fun toDeclareString(): String {
+        return constraints.map { it.toDeclareString() }.joinToString(" ")
+    }
+
     companion object {
-        fun fromString(textValue: String, format: Format): PrimitiveSchema? {
+        fun fromDeclareString(textValue: String, format: Format): PrimitiveSchema? {
             val recognizers: List<ConstraintRecognizer> = listOf(
                 TypeNameRecognizer, RequiredRecognizer
             )
@@ -37,7 +41,9 @@ data class PrimitiveSchema(val constraints: List<Constraint>, val description: S
 //限制
 
 @JsonWithType
-interface Constraint
+interface Constraint {
+    fun toDeclareString(): String
+}
 
 typealias Constraints = List<Constraint>
 
@@ -55,10 +61,33 @@ fun DataSchema.thisConstraints(): Constraints {
     }
 }
 
-data class NamedType(val name: String) : Constraint
-data object Required : Constraint
-data object NotEmpty : Constraint
+data class NamedType(val name: String) : Constraint {
+    override fun toDeclareString(): String {
+        return name
+    }
+}
+
+data object Required : Constraint {
+    override fun toDeclareString(): String {
+        return "required"
+    }
+}
+
+data object NotEmpty : Constraint {
+    override fun toDeclareString(): String {
+        return "notEmpty"
+    }
+}
+
 data class LengthRange(val min: Int?, val max: Int?) : Constraint {
+    init {
+        require(min != null || max != null)
+    }
+
+    override fun toDeclareString(): String {
+        return "lengthRange($min, $max)"
+    }
+
     init {
         require(min != null || max != null)
     }
@@ -139,9 +168,17 @@ data class Range(val min: Int?, val max: Int?) : Constraint {
     init {
         require(min != null || max != null)
     }
+
+    override fun toDeclareString(): String {
+        return "range($min, $max)"
+    }
 }
 
-data class Pattern(val regex: String) : Constraint
+data class Pattern(val regex: String) : Constraint {
+    override fun toDeclareString(): String {
+        return "pattern($regex)"
+    }
+}
 
 interface ConstraintRecognizer {
     fun recognize(textValue: String): Constraint?

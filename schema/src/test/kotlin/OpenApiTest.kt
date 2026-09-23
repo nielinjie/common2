@@ -2,6 +2,7 @@ package xyz.nietongxue.common.schema.openApi
 
 import xyz.nietongxue.common.schema.jsonSchema.toJsonSchema
 import xyz.nietongxue.common.schema.parse.parseData
+import xyz.nietongxue.common.schema.parse.toDeclareString
 import xyz.nietongxue.common.testing.pretty
 import kotlin.test.Test
 
@@ -9,17 +10,24 @@ import kotlin.test.Test
 class OpenApiTest {
 
     @Test
-    fun testJsonSchema(){
+    fun testJsonSchema() {
         val string = "{type:'string', data:{}}"
-        val schema = parseData( string)
+        val schema = parseData(string)
+
         schema.toJsonSchema().also {
             println(it.toPrettyString())
         }
+        schema.toDeclareString().also {
+            println(it)
+            val newSchema = parseData(it)
+            pretty(newSchema)
+        }
     }
+
     @Test
-    fun testJsonSchema2(){
+    fun testJsonSchema2() {
         val string = "{type:'string', data:{ _: false }}"
-        val schema = parseData( string)
+        val schema = parseData(string)
         schema.toJsonSchema().also {
             println(it.toPrettyString())
         }

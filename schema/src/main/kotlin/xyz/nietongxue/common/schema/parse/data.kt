@@ -1,27 +1,43 @@
 package xyz.nietongxue.common.schema.parse
 
 import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.*
+import com.fasterxml.jackson.databind.node.ArrayNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.databind.node.TextNode
 import xyz.nietongxue.common.json.autoParse.Format
 import xyz.nietongxue.common.json.autoParse.autoParse
-import xyz.nietongxue.common.schema.*
+import xyz.nietongxue.common.schema.ArraySchema
+import xyz.nietongxue.common.schema.DataSchema
+import xyz.nietongxue.common.schema.ObjectSchema
+import xyz.nietongxue.common.schema.PrimitiveSchema
 
-@Deprecated("内部使用，外部请使用 parseDataSchema ")
-fun parseData(json: JsonNode, format: Format): DataSchema {
+
+fun DataSchema.toDeclareString(): String {
+    return when (this) {
+        is PrimitiveSchema -> this.toDeclareString()
+        is ArraySchema -> "[${this.itemSchema.toDeclareString()}]"
+        is ObjectSchema -> this.properties.map { "\"${it.key}\": \"${it.value.toDeclareString()}\"" }
+            .joinToString(prefix = "{", postfix = "}", separator = ",") //TODO 处理 additionalProperties
+        else -> error("not recognized data schema - $this")
+    }
+}
+
+internal fun parseData(json: JsonNode, format: Format): DataSchema {
     return when (json) {
-        is BooleanNode -> Schemas.boolean()
-        is IntNode -> Schemas.int()
-        is LongNode -> Schemas.int()
-        is DoubleNode -> Schemas.number()
-        is FloatNode -> Schemas.number()
         is TextNode -> json.textValue().let {
 
-            PrimitiveSchema.fromString(it, format)
+            PrimitiveSchema.fromDeclareString(it, format)
         }
             ?: error("primitiveSchema parse failed - ${json.toPrettyString()}")
 
         is ArrayNode -> ArraySchema(parseData(json.get(0)!!, format))
-        is ObjectNode -> ObjectSchema(json.properties().associate { it.key to parseData(it.value, format) })
+        is ObjectNode -> ObjectSchema(
+            json.properties().associate {
+                it.key to parseData(
+                    it.value,
+                    format
+                )
+            }) //TODO if it.key="_", then it's additionalProperties 按照 it.value 处理。
         else -> error("not recognized json node - ${json.toPrettyString()}")
     }
 }
