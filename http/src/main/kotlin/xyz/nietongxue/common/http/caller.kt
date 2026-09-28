@@ -20,20 +20,6 @@ import java.nio.charset.StandardCharsets
 
 object HttpCaller {
 
-    private val om = defaultOM
-
-    //TODO 有时候，输入参数被转换成 map 会有变形，比如tools 调用传入 json string，转换成 map 时会被扁平。
-    // 不全是这里的问题，大模型的 inputString 总是在 property 的某一层加上“”，使其不是一个 object，而是一个 json string。
-    // 没搞清楚是什么原因。大模型tool 机制不允许整个 inputString 是个深层json object？
-    // 感觉各种没道理，是 json schema 没写对？当时的 jsonSchema 是-
-    // propertyDeclares 总是要包在 string 里面。
-    // "inputJsonSchema":"{
-    //          \"type\":[\"object\",\"null\"],
-    //          \"additionalProperties\":false,
-    //          \"properties\":{\"name\":{\"type\":\"string\"},\"namespace\":{\"type\":\"string\"},\"idName\":{\"type\":\"string\",\"description\":\"The name of the id property.\"},
-    //              \"propertyDeclares\":{\"type\":[\"object\",\"null\"],\"additionalProperties\":true,\"description\":\"The property declares of the entity, a object, NOT a jsonString, example - {name: string, age: number}\"}},\"required\":[\"name\",\"namespace\",\"idName\"]}"}
-
-
     @JvmOverloads
     fun call(url: String, inputs: Map<String, Any>, callOption: CallOption = CallOption(), logger: Logger?): String {
         logger?.debug("ApiCaller.call：url={} inputs={} option={}", url, inputs, callOption)
@@ -69,20 +55,21 @@ object HttpCaller {
             RequestMethod.GET -> {
                 request = HttpGet(uriBuilder.build())
             }
+
             RequestMethod.POST -> {
                 val httpPost = HttpPost(uriBuilder.build())
                 if (body.isNotEmpty()) {
-                    val jsonBody = om.writeValueAsString(body)
+                    val jsonBody = defaultOM.writeValueAsString(body) //所有参数合并。
                     httpPost.entity = StringEntity(jsonBody, StandardCharsets.UTF_8)
                     httpPost.addHeader("Content-Type", "application/json; charset=utf-8")
-                } else if (
-                    form.isNotEmpty()
-                ) {
+                } else if (form.isNotEmpty()) {
                     httpPost.entity = buildMultipartEntity(form, logger)
                     httpPost.addHeader("Content-Type", "application/x-www-form-urlencoded; charset=utf-8")
                 }
                 request = httpPost
             }
+
+            else -> TODO()
         }
         headers.forEach { (string, any) -> request.addHeader(string, any.toString()) }
 
