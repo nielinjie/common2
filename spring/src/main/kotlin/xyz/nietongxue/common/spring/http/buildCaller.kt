@@ -16,7 +16,13 @@ import io.swagger.v3.oas.annotations.media.Schema as SwaggerSchema
 /**
  * 根据 Spring Controller 方法生成 HTTP 调用
  */
-data class Calling(val schema: Schema<*>, val option: CallOption, val url: URI)
+data class Calling(
+    val schema: Schema<*>,
+    val option: CallOption,
+    val url: URI,
+    val name: String? = null,
+    val description: String? = null,
+)
 
 fun buildCaller(method: Method): Calling {
 
@@ -45,13 +51,18 @@ fun buildCaller(method: Method): Calling {
         mergedSchema.addProperty(name, schema)
         option = option.copy(inputMapping = option.inputMapping.setPlace(place, name))
     }
-    return Calling(mergedSchema, option, URI(fullPath))
+    return Calling(
+        mergedSchema,
+        option,
+        URI(fullPath),
+        name = method.name,
+        description = method.getAnnotation(SwaggerSchema::class.java)?.description
+    )
 }
 
 data class ParameterWithPlace(val name: String, val schema: Schema<*>, val place: InputToPlace)
 
 fun parametersAndPlace(method: Method): List<ParameterWithPlace> {
-//    val kf = method.kotlinFunction ?: error("方法没有对应的 Kotlin 函数")
     val parameters = method.parameters
     val re = mutableListOf<ParameterWithPlace>()
     parameters.firstOrNull()?.also {
@@ -59,32 +70,29 @@ fun parametersAndPlace(method: Method): List<ParameterWithPlace> {
             error("没有找到参数名，使用 -java-parameters 方案。")
         }
     }
+    val placeAnnoClasses = listOf(
+        RequestBody::class.java,
+        RequestParam::class.java,
+        PathVariable::class.java,
+        CookieValue::class.java
+    )
     parameters.forEach { para ->
-        val ans = para.annotations
-        ans.forEach { annotation ->
-            when (annotation) {
-                is RequestBody -> {
-                    re.add(ParameterWithPlace(para.name!!, typeToSchema(para.type), InputToPlace.Body))
-                }
-
-                is RequestParam -> {
-                    re.add(
-                        ParameterWithPlace(
-                            para.name!!,
-                            typeToSchema(para.type),
-                            InputToPlace.Query
-                        )
-                    ) //TODO FORM
-                }
-
-                is PathVariable -> {
-                    re.add(ParameterWithPlace(para.name!!, typeToSchema(para.type), InputToPlace.Path))
-                }
-
-                is CookieValue -> {
-                    re.add(ParameterWithPlace(para.name!!, typeToSchema(para.type), InputToPlace.Cookie))
-                }
-            }
+        val ans = para.annotations.toList()
+        val placeAnno = ans.oneOrNone { it.javaClass in placeAnnoClasses }
+        placeAnno?.also { annotation -> //这里应该只有一次，不应该 foreach。annotations 可能有几个，但这里的几个分支，只能有互斥的一次。
+            re.add(
+                ParameterWithPlace(
+                    para.name!!,
+                    typeToSchema(para.type).mergeSchemaAnnotation(para.getAnnotation(SwaggerSchema::class.java)),
+                    when (annotation) {
+                        is RequestBody -> InputToPlace.Body
+                        is RequestParam -> InputToPlace.Query
+                        is PathVariable -> InputToPlace.Path
+                        is CookieValue -> InputToPlace.Cookie
+                        else -> error("unknown annotation")
+                    }
+                )
+            )
         }
     }
     return re
@@ -123,9 +131,10 @@ private fun typeToSchema(javaClass: Class<*>): Schema<*> {
  * 完整转换为 Schema 模型，再合并非空属性到目标 Schema 中。
  */
 
-private fun <T : Any> Schema<T>.mergeSchemaAnnotation(annotation: SwaggerSchema) {
+private fun <T : Any> Schema<T>.mergeSchemaAnnotation(annotation: SwaggerSchema?): Schema<T> {
+    if (annotation == null) return this
     val annotationSchema = AnnotationsUtils.getSchemaFromAnnotation(annotation, null)
-        .orElse(null) ?: return
+        .orElse(null) ?: return this
 
     // 注解 Schema 的属性优先，但保留原有的 type/format 作为 fallback
     val originalType = this.type
@@ -147,6 +156,7 @@ private fun <T : Any> Schema<T>.mergeSchemaAnnotation(annotation: SwaggerSchema)
     annotationSchema.nullable?.also { this.nullable = it }
     annotationSchema.deprecated?.also { this.deprecated = it }
     annotationSchema.enum?.also { @Suppress("UNCHECKED_CAST") this.setEnum(it as List<T>) }
+    return this
 }
 
 fun extractMethodMapping(method: Method): Pair<String, String> {
