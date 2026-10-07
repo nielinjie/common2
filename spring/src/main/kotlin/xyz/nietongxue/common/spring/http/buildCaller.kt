@@ -78,7 +78,7 @@ fun parametersAndPlace(method: Method): List<ParameterWithPlace> {
     )
     parameters.forEach { para ->
         val ans = para.annotations.toList()
-        val placeAnno = ans.oneOrNone { it.javaClass in placeAnnoClasses }
+        val placeAnno = ans.oneOrNone { ann -> placeAnnoClasses.any { it.isAssignableFrom(ann.javaClass) } }
         placeAnno?.also { annotation -> //这里应该只有一次，不应该 foreach。annotations 可能有几个，但这里的几个分支，只能有互斥的一次。
             re.add(
                 ParameterWithPlace(

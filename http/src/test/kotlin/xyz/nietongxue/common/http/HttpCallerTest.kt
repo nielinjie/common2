@@ -43,7 +43,7 @@ class HttpCallerTest {
         val inputs = mapOf("name" to "alice", "age" to 30)
         val option = CallOption(method = RequestMethod.GET)
 
-        val result = HttpCaller.call(url, inputs, option, null)
+        val result = HttpCaller.call(url, inputs, callOption = option, logger = null)
 
         assertEquals("{\"result\":\"ok\"}", result)
         assertTrue(capturedQuery!!.contains("name=alice"))
@@ -70,7 +70,7 @@ class HttpCallerTest {
             method = RequestMethod.POST
         )
 
-        val result = HttpCaller.call(url, inputs, option, null)
+        val result = HttpCaller.call(url, inputs, callOption = option, logger = null)
 
         assertEquals("{\"result\":\"created\"}", result)
         assertTrue(capturedBody!!.contains("\"title\":\"test\""))
@@ -98,7 +98,7 @@ class HttpCallerTest {
             )
         )
 
-        val result = HttpCaller.call(url, inputs, option, null)
+        val result = HttpCaller.call(url, inputs, callOption = option, logger = null)
 
         assertEquals("{\"result\":\"ok\"}", result)
         assertEquals("custom-value", capturedHeaders["X-Custom-Header"])
@@ -124,7 +124,7 @@ class HttpCallerTest {
             )
         )
 
-        val result = HttpCaller.call(url, inputs, option, null)
+        val result = HttpCaller.call(url, inputs, callOption = option, logger = null)
 
         assertEquals("{\"result\":\"ok\"}", result)
         assertEquals("Bearer my-secret-token", authHeader)
@@ -144,7 +144,7 @@ class HttpCallerTest {
         val option = CallOption(method = RequestMethod.GET)
 
         val exception = assertThrows<IOException> {
-            HttpCaller.call(url, inputs, option, null)
+            val result = HttpCaller.call(url, inputs, callOption = option, logger = null)
         }
 
         assertTrue(exception.message!!.contains("400"))
@@ -170,7 +170,7 @@ class HttpCallerTest {
             method = RequestMethod.POST
         )
 
-        val result = HttpCaller.call(url, inputs, option, null)
+        val result = HttpCaller.call(url, inputs, callOption = option, logger = null)
 
         assertEquals("{\"result\":\"uploaded\"}", result)
         assertTrue(capturedContentType!!.contains("application/x-www-form-urlencoded"))

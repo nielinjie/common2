@@ -1,5 +1,8 @@
 package xyz.nietongxue.common.http
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.fasterxml.jackson.module.kotlin.treeToValue
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpRequestBase
@@ -15,14 +18,21 @@ import org.apache.http.impl.client.HttpClients
 import org.apache.http.util.EntityUtils
 import org.slf4j.Logger
 import xyz.nietongxue.common.json.defaultOM
+import xyz.nietongxue.common.json.jo
 import java.io.IOException
 import java.nio.charset.StandardCharsets
 
 object HttpCaller {
 
     @JvmOverloads
-    fun call(url: String, inputs: Map<String, Any>, callOption: CallOption = CallOption(), logger: Logger?): String {
-        logger?.debug("ApiCaller.call：url={} inputs={} option={}", url, inputs, callOption)
+    fun call(
+        url: String,
+        inputs: Map<String, Any>,
+        inputAsObject: ObjectNode = jo(),
+        callOption: CallOption = CallOption(),
+        logger: Logger?
+    ): String {
+        logger?.debug("ApiCaller.call：url={} inputs={} asObject = {} option={}", url, inputs, inputAsObject, callOption)
 
         // header
         val headers = mutableMapOf<String, Any>()
@@ -31,7 +41,9 @@ object HttpCaller {
         val form = mutableMapOf<String, Any>()
 
 
-        inputs.forEach { (key, value) ->
+        val allInputs: Map<String, Any> = inputs + (defaultOM.treeToValue<Map<String, Any>>(inputAsObject))
+
+        allInputs.forEach { (key, value) ->
             val place = callOption.inputMapping.getByField(key)
             when (place) {
                 InputToPlace.Header -> headers[key] = value
@@ -58,9 +70,9 @@ object HttpCaller {
 
             RequestMethod.POST -> {
                 val httpPost = HttpPost(uriBuilder.build())
-                if (body.isNotEmpty()) {
-                    val jsonBody = defaultOM.writeValueAsString(body) //所有参数合并。
-                    httpPost.entity = StringEntity(jsonBody, StandardCharsets.UTF_8)
+                if (body.isNotEmpty() ) {
+                    val jsonBody = defaultOM.valueToTree<ObjectNode>(body)
+                    httpPost.entity = StringEntity(jsonBody.toString(), StandardCharsets.UTF_8)
                     httpPost.addHeader("Content-Type", "application/json; charset=utf-8")
                 } else if (form.isNotEmpty()) {
                     httpPost.entity = buildMultipartEntity(form, logger)
@@ -69,7 +81,7 @@ object HttpCaller {
                 request = httpPost
             }
 
-            else -> TODO()
+            else -> error("Unsupported method: ${callOption.method}")
         }
         headers.forEach { (string, any) -> request.addHeader(string, any.toString()) }
 
