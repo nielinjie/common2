@@ -6,13 +6,16 @@ import com.alibaba.qlexpress4.QLOptions
 import com.alibaba.qlexpress4.security.QLSecurityStrategy
 import com.dashjoin.jsonata.Jsonata
 import groovy.lang.GroovyShell
+import org.slf4j.Logger
 import xyz.nietongxue.common.base.Stuff
 import xyz.nietongxue.common.json.JQ_TRANSFER
 import xyz.nietongxue.common.json.JQ_TRANSFER_FIRST
 import xyz.nietongxue.common.json.autoJson
 import xyz.nietongxue.common.json.transform
+import java.io.File
+import java.net.URLClassLoader
+import kotlin.script.experimental.jsr223.KOTLIN_JSR223_RESOLVE_FROM_CLASSLOADER_PROPERTY
 import kotlin.script.experimental.jsr223.KotlinJsr223DefaultScriptEngineFactory
-
 
 typealias RunResult = Pair<Any, Stuff>
 
@@ -41,12 +44,52 @@ fun groovyRun(script: String, context: Stuff): RunResult {
     return (result to context)
 }
 
-fun kotlinRun(script: String, context: Stuff): RunResult {
-    val engine = KotlinJsr223DefaultScriptEngineFactory().getScriptEngine().also {
-        context.forEach { (string, any) -> it.put(string, any) }
+
+fun kotlinRun(script: String, context: Stuff, customClassloader: ClassLoader? = null): RunResult {
+    System.setProperty(KOTLIN_JSR223_RESOLVE_FROM_CLASSLOADER_PROPERTY, "false")
+    val logger = context.get("logger") as? Logger
+
+
+    val classLoader = Thread.currentThread().contextClassLoader
+    logger?.info("thread: ${Thread.currentThread().name}")
+    logger?.info("classLoader: ${classLoader.name}")
+    val classpath = when (classLoader) {
+        is URLClassLoader -> {
+            classLoader.urLs.joinToString(File.pathSeparator) { url ->
+                File(url.toURI()).absolutePath
+            }
+        }
+
+        else -> System.getProperty("java.class.path")
     }
-    val result = engine.eval(script)
-    return (result to context)
+    logger?.info("classpath find by thread: $classpath")
+//    val setClasspath = "file:/app/plugins/plugin-llm-0.8.0-SNAPSHOT.jar"
+//    logger?.info("Script engine classpath set by hand: $setClasspath")
+
+//    val urls = arrayOf(URI(setClasspath).toURL())
+
+    // 2. 创建一个基于当前类加载器的 URLClassLoader
+    val currentClassLoader = Thread.currentThread().contextClassLoader
+    val customClassLoaderInner = customClassloader ?: currentClassLoader
+
+    // 3. 将其设置为当前线程的上下文类加载器
+    Thread.currentThread().contextClassLoader = customClassLoaderInner
+
+    try {
+        // 4. 初始化脚本引擎（此时它将加载 customClassLoader 中的类）
+        val engine = KotlinJsr223DefaultScriptEngineFactory().getScriptEngine().also {
+            context.forEach { (string, any) -> it.put(string, any) }
+        }
+
+        val result = engine.eval(script)
+        logger?.info("Script engine run result: $result")
+        return (result to context)
+
+    } finally {
+        // 5. 还原线程的上下文类加载器（推荐做法）
+        Thread.currentThread().contextClassLoader = currentClassLoader
+    }
+
 
 }
 
