@@ -4,7 +4,14 @@ package xyz.nietongxue.common.http
 data class CallOption(
     val inputMapping: InputMapping = InputMapping.allInParams,
     val method: RequestMethod = RequestMethod.POST,
-)
+) {
+    companion object {
+        val postInBody = CallOption(inputMapping = InputMapping.inBody, method = RequestMethod.POST)
+    }
+    fun setPlace(place: InputToPlace, vararg fields: String): CallOption {
+        return copy(inputMapping = inputMapping.setPlace(place, *fields))
+    }
+}
 
 /**
  * | 对比项 | @RequestParam | @RequestBody |
