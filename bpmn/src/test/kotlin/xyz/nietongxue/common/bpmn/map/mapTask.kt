@@ -1,4 +1,15 @@
-package xyz.nietongxue.common.bpmn
+package xyz.nietongxue.common.bpmn.map
+
+import xyz.nietongxue.common.bpmn.Action
+import xyz.nietongxue.common.bpmn.Define
+import xyz.nietongxue.common.bpmn.Element
+import xyz.nietongxue.common.bpmn.EndEvent
+import xyz.nietongxue.common.bpmn.InnerProcess
+import xyz.nietongxue.common.bpmn.Loop
+import xyz.nietongxue.common.bpmn.ScriptAction
+import xyz.nietongxue.common.bpmn.SequenceFlow
+import xyz.nietongxue.common.bpmn.StartEvent
+import xyz.nietongxue.common.bpmn.Task
 
 class MapTask(
     val resultContextName: String,

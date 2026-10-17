@@ -32,6 +32,7 @@
         <module>fx</module>
         <module>pinyin</module>
         <module>http</module>
+        <module>runtime</module>
     </modules>
 
     <properties>

@@ -1,0 +1,53 @@
+<definitions xmlns:cf="http://www.compileflow.org/schema/1.0" xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" targetNamespace="test">
+	<process name="test" id="test" isExecutable="true">
+		<extensionElements>
+			<cf:var name="collection" description="collection" dataType="java.util.ArrayList&lt;String&gt;" inOutType="param"/>
+			<cf:var name="me" description="me" dataType="java.lang.String" inOutType="param"/>
+			<cf:var name="resultMap" description="resultMap" dataType="java.util.HashMap&lt;String,String&gt;" inOutType="return"/>
+			<cf:var name="inner_result" description="inner_result" dataType="java.lang.String" inOutType="inner"/>
+		</extensionElements>
+		<startEvent name="start" id="start"/>
+		<sequenceFlow name="flow1" id="flow1" sourceRef="start" targetRef="newResultMap"/>
+		<scriptTask name="newResultMap" id="newResultMap" scriptFormat="groovy">
+			<extensionElements>
+				<cf:var name="resultMap" dataType="java.util.HashMap&lt;String,String&gt;" contextVarName="resultMap" inOutType="return"/>
+			</extensionElements>
+			<script>
+				<![CDATA[new HashMap<String,String>()]]>
+			</script>
+		</scriptTask>
+		<sequenceFlow name="flow15" id="flow15" sourceRef="newResultMap" targetRef="loop"/>
+		<subProcess name="loop" id="loop">
+			<multiInstanceLoopCharacteristics cf:collection="collection" cf:elementVar="p" cf:indexVar="i" cf:elementVarClass="java.lang.String"/>
+			<startEvent name="start_inner_1806880779" id="start_inner_1806880779"/>
+			<sequenceFlow name="flow2_inner_1806880779" id="flow2_inner_1806880779" sourceRef="start_inner_1806880779" targetRef="task1_inner_1806880779"/>
+			<serviceTask name="task1_inner_1806880779" id="task1_inner_1806880779">
+				<extensionElements>
+					<cf:action type="java">
+						<cf:actionHandle clazz="xyz.nietongxue.common.bpmn.MyAppender" method="append">
+							<cf:var name="i" dataType="java.lang.Integer" contextVarName="i" inOutType="param"/>
+							<cf:var name="a" dataType="java.lang.String" contextVarName="p" inOutType="param"/>
+							<cf:var name="b" dataType="java.lang.String" contextVarName="me" inOutType="param"/>
+							<cf:var name="result" dataType="java.lang.String" contextVarName="inner_result" inOutType="return"/>
+						</cf:actionHandle>
+					</cf:action>
+				</extensionElements>
+			</serviceTask>
+			<sequenceFlow name="flow3_inner_1806880779" id="flow3_inner_1806880779" sourceRef="task1_inner_1806880779" targetRef="setResult"/>
+			<scriptTask name="setResult" id="setResult" scriptFormat="groovy">
+				<extensionElements>
+					<cf:var name="i" dataType="java.lang.Integer" contextVarName="i" inOutType="param"/>
+					<cf:var name="inner_result" dataType="java.lang.String" contextVarName="inner_result" inOutType="param"/>
+					<cf:var name="resultMap" dataType="java.util.HashMap&lt;String,String&gt;" contextVarName="resultMap" inOutType="param"/>
+				</extensionElements>
+				<script>
+					<![CDATA[resultMap.put(i,inner_result);]]>
+				</script>
+			</scriptTask>
+			<sequenceFlow name="flow4_inner_1806880779" id="flow4_inner_1806880779" sourceRef="setResult" targetRef="end_inner_1806880779"/>
+			<endEvent name="end_inner_1806880779" id="end_inner_1806880779"/>
+		</subProcess>
+		<sequenceFlow name="flow2" id="flow2" sourceRef="loop" targetRef="end"/>
+		<endEvent name="end" id="end"/>
+	</process>
+</definitions>

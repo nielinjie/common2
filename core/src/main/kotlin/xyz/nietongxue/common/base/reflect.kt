@@ -26,10 +26,9 @@ fun findMethod(clazz: Class<*>, criteria: MethodSearchCriteria): Method? {
     return clazz.methods.firstOrNull() { method ->
         method.name == criteria.methodName
                 && method.parameterCount == criteria.parameterTypes.size
-                && method.parameterTypes.withIndex()
-            .all {
-                val parameterType = criteria.parameterTypes[it.index]
-                it.value.isAssignableFrom(parameterType) //TODO 改成继承关系的判断
-            }
+                && (method.parameterTypes.withIndex().all { methodP ->
+            val criteriaParameterType = criteria.parameterTypes[methodP.index]
+            methodP.value.isAssignableFrom(criteriaParameterType) //TODO 改成继承关系的判断
+        })
     }
 }

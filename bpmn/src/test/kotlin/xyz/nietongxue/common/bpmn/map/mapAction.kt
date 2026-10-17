@@ -1,7 +1,11 @@
-package xyz.nietongxue.common.bpmn
+package xyz.nietongxue.common.bpmn.map
 
 import com.alibaba.compileflow.engine.core.infrastructure.utils.ClassUtils
-import java.lang.reflect.Method
+import xyz.nietongxue.common.base.MethodSearchCriteria
+import xyz.nietongxue.common.base.findMethod
+import xyz.nietongxue.common.bpmn.Action
+import xyz.nietongxue.common.bpmn.ActionDefine
+import xyz.nietongxue.common.bpmn.ObjectMethodAction
 
 
 class MapActionEx {
@@ -13,9 +17,9 @@ class MapActionEx {
     ): HashMap<String, String> {
         val obj = ClassUtils.newInstance<Any>(targetClazz)
         val clazz = Class.forName(targetClazz)
-        val paraTypes = listOf("java.lang.String", "java.lang.Object", "java.lang.Integer")
-        val paraTypesNoIndex = listOf("java.lang.String", "java.lang.Object")
-        var method = MethodFinder.findMethod(clazz, MethodSearchCriteria(targetMethod, paraTypesNoIndex))!!
+        val paraTypes = listOf("java.lang.String", "java.lang.String", "java.lang.Integer").map { Class.forName(it) }
+        val paraTypesNoIndex = paraTypes.take(2)
+        var method = findMethod(clazz, MethodSearchCriteria(targetMethod, paraTypes))!!
 
         println("method by paraTypes - $method")
 
@@ -28,7 +32,7 @@ class MapActionEx {
 //                else
 //                    method.invoke(obj, it.value, byPass, it.index) as String
 //            }
-            val re = method.invoke(obj, it.value, byPass) as String
+            val re = method.invoke(obj, it.value, byPass, it.index) as String
             result[it.index.toString()] = re
         }
         return result
@@ -56,6 +60,10 @@ class Mapping(
 
 }
 
+/**
+ * 没啥特别的平台意义，是一个验证基础组件好写不好写的demo。
+ * 一个类似 collection.map 的组件。
+ */
 class MapAction(
     val targetClazz: String,
     val targetMethod: String,
@@ -68,14 +76,34 @@ class MapAction(
             MapActionEx::class.java.canonicalName,
             "run",
             inputs = listOfNotNull(
-                Action.Input("collection", "java.util.ArrayList<String>", collection),
-                Action.Input("targetClazz", "java.lang.String", defaultValue = targetClazz),
-                Action.Input("targetMethod", "java.lang.String", defaultValue = targetMethod),
-                Action.Input("byPassVar", "java.lang.Object", contextVarName = byPassVar)
+                Action.Input(
+                    "collection",
+                    "java.util.ArrayList<String>",
+                    collection
+                ),
+                Action.Input(
+                    "targetClazz",
+                    "java.lang.String",
+                    defaultValue = targetClazz
+                ),
+                Action.Input(
+                    "targetMethod",
+                    "java.lang.String",
+                    defaultValue = targetMethod
+                ),
+                Action.Input(
+                    "byPassVar",
+                    "java.lang.Object",
+                    contextVarName = byPassVar
+                )
             ),
 
             outputs = listOf(
-                Action.Output("resultMap", "java.util.HashMap<String,String>", resultContextName)
+                Action.Output(
+                    "resultMap",
+                    "java.util.HashMap<String,String>",
+                    resultContextName
+                )
             )
         )
     }
